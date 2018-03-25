@@ -1,0 +1,23 @@
+version: '3'
+
+networks:
+  backend_network:
+    driver: bridge
+
+services:
+  redis:
+    image: redis:3.2.11
+    container_name: Redis
+    networks:
+      - backend_network
+    ports:
+      - "6379:6379"
+
+  dispatcher:
+    build: ./dispatcher/manager
+    image: claclacla/dispatcher-manager
+    container_name: DispatcherManager
+    networks:
+      - backend_network
+    volumes:
+      - "${APP_FOLDER}:/usr/src/app"
