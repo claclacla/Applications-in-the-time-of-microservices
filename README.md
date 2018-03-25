@@ -67,4 +67,4 @@ This project is licensed under the MIT License
 
 ## Acknowledgments
 
-- [NightwatchJS](http://nightwatchjs.org/)
+- [Docker](https://www.docker.com/)
