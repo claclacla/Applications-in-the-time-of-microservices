@@ -1,23 +1,25 @@
 version: '3'
 
 networks:
-  backend_network:
+  rabbitmq_network:
     driver: bridge
 
 services:
-  redis:
-    image: redis:3.2.11
-    container_name: Redis
+  rabbitmq:
+    image: rabbitmq:3.7.4
+    container_name: RabbitMQ
     networks:
-      - backend_network
+      - rabbitmq_network
     ports:
-      - "6379:6379"
+      - "5672:5672"
 
-  dispatcher:
+  dispatcher-manager:
     build: ./dispatcher/manager
     image: claclacla/dispatcher-manager
     container_name: DispatcherManager
     networks:
-      - backend_network
+      - rabbitmq_network
     volumes:
       - "${APP_FOLDER}:/usr/src/app"
+    tty: true
+    stdin_open: true

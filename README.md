@@ -1,6 +1,6 @@
 # Applications in the time of microservices
 
-## Break up your application into smaller dockerized microservices using Redis and Express.js
+## Break up your application into smaller dockerized microservices
 
 Currently under development...
 
