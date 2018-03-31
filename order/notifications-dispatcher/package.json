@@ -1,0 +1,14 @@
+{
+  "name": "order-notifications-dispatcher",
+  "version": "1.0.0",
+  "description": "Order notifications dispatcher",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.5.2"
+  }
+}
