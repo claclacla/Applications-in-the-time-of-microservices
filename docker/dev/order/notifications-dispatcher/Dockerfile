@@ -1,5 +1,5 @@
-FROM node:9.2-slim
+FROM ruby:2.5.1-slim
 
-RUN npm install -g pm2 
+RUN gem install bunny 
 
-CMD ["/usr/src/app/docker/dev/order/notifications-dispatcher/docker_init.sh"]
+CMD ruby /usr/src/app/order/notifications-dispatcher/app.rb
