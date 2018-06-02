@@ -1,12 +1,15 @@
-require_relative '../../lib/MessageBroker/RabbitMQ/RabbitMQMessageBroker'
+require_relative '../../lib/MessageBroker/MessageBroker'
+require_relative '../../lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
 
-messageBroker = RabbitMQMessageBroker.new(host: "rabbitmq")
+dispatcher = RabbitMQDispatcher.new(host: "rabbitmq")
+messageBroker = MessageBroker.new(dispatcher: dispatcher)
 
 begin
   messageBroker.connect
 rescue MessageBrokerConnectionRefused
-  puts "RabbitMQ connection refused"
+  abort "RabbitMQ connection refused"
 end  
+
 #messageBroker.createChannel(name: "hello") 
 # begin
 #   puts ' [*] Waiting for messages. To exit press CTRL+C'

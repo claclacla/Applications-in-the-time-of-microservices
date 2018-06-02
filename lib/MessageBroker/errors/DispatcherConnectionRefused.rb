@@ -1,0 +1,3 @@
+class DispatcherConnectionRefused < RuntimeError
+
+end
