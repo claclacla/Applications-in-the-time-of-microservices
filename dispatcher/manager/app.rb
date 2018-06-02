@@ -11,7 +11,6 @@ rescue MessageBrokerConnectionRefused
 end  
 
 route = messageBroker.createRoute(name: "dispatcher") 
-
 route.subscribe { |body|
   puts " [x] Received #{body}"
 }

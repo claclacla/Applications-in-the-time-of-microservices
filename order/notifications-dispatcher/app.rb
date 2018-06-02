@@ -1,23 +1,14 @@
-require 'bunny'
+require_relative '../../lib/MessageBroker/MessageBroker'
+require_relative '../../lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
 
-puts "Dispatcher manager..."
+dispatcher = RabbitMQDispatcher.new(host: "rabbitmq")
+messageBroker = MessageBroker.new(dispatcher: dispatcher)
 
-def main
-  begin
-    connection = Bunny.new(host: "rabbitmq", automatically_recover: false)
-    connection.start
+begin
+  messageBroker.connect
+rescue MessageBrokerConnectionRefused
+  abort "RabbitMQ connection refused"
+end  
 
-    channel = connection.create_channel
-    queue = channel.queue('hello')
-    
-    channel.default_exchange.publish('Hello World!', routing_key: queue.name)
-    puts " [x] Sent 'Hi!'"
-    
-    connection.close
-  rescue
-    sleep(1)
-    main
-  end  
-end
-
-main
+route = messageBroker.createRoute(name: "dispatcher") 
+route.publish(body: "Hi!")
