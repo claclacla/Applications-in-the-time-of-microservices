@@ -1,5 +1,6 @@
 require 'bunny'
 
+require_relative '../IDispatcher'
 require_relative '../../errors/DispatcherConnectionRefused'
 
 class RabbitMQDispatcher
@@ -33,4 +34,6 @@ class RabbitMQDispatcher
 
     @channels[name] = { channel: channel, queue: queue }
   end  
+
+  implements IDispatcher
 end
