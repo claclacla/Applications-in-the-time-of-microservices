@@ -1,12 +1,11 @@
 require 'bunny'
 
 require_relative '../IDispatcher'
+require_relative 'RabbitMQRoute'
 require_relative '../../errors/DispatcherConnectionRefused'
 
 class RabbitMQDispatcher
   def initialize host:
-    @channels = Hash.new
-
     @connection = Bunny.new(host: host) 
   end  
 
@@ -28,11 +27,10 @@ class RabbitMQDispatcher
 
   # TODO: Add a begin/rescue
 
-  def createChannel name:
-    channel = @connection.create_channel
-    queue = channel.queue(name)
+  def createRoute name:
+    route = RabbitMQRoute.new(channel: @connection.create_channel, name: name)
 
-    @channels[name] = { channel: channel, queue: queue }
+    return route
   end  
 
   implements IDispatcher
