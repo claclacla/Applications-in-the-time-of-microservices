@@ -9,8 +9,16 @@ class RabbitMQRoute
     @queue = channel.queue(name)
   end
 
+  # TODO: Handle the Interrupt error
+
   def subscribe
-    yield "HI"
+    begin
+      @queue.subscribe(block: true) do |_delivery_info, _properties, body|
+        yield body
+      end
+    rescue Interrupt => _
+
+    end
   end
 
   implements IRoute
