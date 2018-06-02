@@ -10,7 +10,8 @@ rescue MessageBrokerConnectionRefused
   abort "RabbitMQ connection refused"
 end  
 
-#messageBroker.createChannel(name: "hello") 
+messageBroker.createChannel(name: "dispatcher") 
+
 # begin
 #   puts ' [*] Waiting for messages. To exit press CTRL+C'
 #   queue.subscribe(block: true) do |_delivery_info, _properties, body|

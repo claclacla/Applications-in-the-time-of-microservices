@@ -4,6 +4,7 @@ class MessageBroker
   def initialize dispatcher:
     @CONNECTION_RETRIES = 10
     @CONNECTION_INTERVAL = 2
+    @channels = Hash.new
 
     @dispatcher = dispatcher 
   end   
@@ -19,10 +20,9 @@ class MessageBroker
     end  
   end
 
-  # def createChannel name:
-  #   channel = @connection.create_channel
-  #   queue = channel.queue(name)
+  # TODO: Add a begin/rescue
 
-  #   @channels[name] = { channel: channel, queue: queue }
-  # end  
+  def createChannel name:
+    @dispatcher.createChannel(name: name)
+  end  
 end

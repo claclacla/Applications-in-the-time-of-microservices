@@ -25,10 +25,12 @@ class RabbitMQDispatcher
     end
   end  
 
-  # def createChannel name:
-  #   channel = @connection.create_channel
-  #   queue = channel.queue(name)
+  # TODO: Add a begin/rescue
 
-  #   @channels[name] = { channel: channel, queue: queue }
-  # end  
+  def createChannel name:
+    channel = @connection.create_channel
+    queue = channel.queue(name)
+
+    @channels[name] = { channel: channel, queue: queue }
+  end  
 end
