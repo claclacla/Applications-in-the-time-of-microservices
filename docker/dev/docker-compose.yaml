@@ -24,13 +24,13 @@ services:
     tty: true
     stdin_open: true
 
-  order-notifications-dispatcher:
-    build: ./order/notifications-dispatcher
-    image: claclacla/order-notifications-dispatcher
-    container_name: OrderNotificationsDispatcher
-    networks:
-      - rabbitmq_network
-    volumes:
-      - "${APP_FOLDER}:/usr/src/app"
-    tty: true
-    stdin_open: true
+  # order-notifications-dispatcher:
+  #   build: ./order/notifications-dispatcher
+  #   image: claclacla/order-notifications-dispatcher
+  #   container_name: OrderNotificationsDispatcher
+  #   networks:
+  #     - rabbitmq_network
+  #   volumes:
+  #     - "${APP_FOLDER}:/usr/src/app"
+  #   tty: true
+  #   stdin_open: true

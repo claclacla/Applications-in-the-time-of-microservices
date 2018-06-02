@@ -1,0 +1,3 @@
+class MessageBrokerConnectionRefused < RuntimeError
+
+end
