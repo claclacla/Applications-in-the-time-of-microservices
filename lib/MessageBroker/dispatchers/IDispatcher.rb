@@ -1,5 +1,5 @@
 require 'interface'
 
 IDispatcher = interface {
-  required_methods :connect, :createRoute
+  required_methods :connect, :createChannel
 }

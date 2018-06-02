@@ -10,5 +10,5 @@ rescue MessageBrokerConnectionRefused
   abort "RabbitMQ connection refused"
 end  
 
-route = messageBroker.createRoute(name: "dispatcher") 
-route.publish(body: "Hi!")
+channel = messageBroker.createChannel(name: "dispatcher") 
+channel.publish(body: "Hi!")

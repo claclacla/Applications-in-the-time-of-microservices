@@ -1,5 +1,5 @@
 require 'interface'
 
-IRoute = interface {
+IChannel = interface {
   required_methods :subscribe, :publish
 }
