@@ -12,9 +12,7 @@ rescue MessageBrokerConnectionRefused
   abort "RabbitMQ connection refused"
 end  
 
-puts "Dispatcher manager: subscribe messages"
-
-#channel = messageBroker.createChannel(name: "dispatcher.send.email") 
-#channel.subscribe { |body|
-#  puts "Dispatcher manager: Received #{body}"
-#}
+channel = messageBroker.createChannel(name: "dispatcher.send.email") 
+channel.subscribe { |body|
+  puts " [x] Received #{body}"
+}

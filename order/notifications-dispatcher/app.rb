@@ -12,12 +12,10 @@ rescue MessageBrokerConnectionRefused
   abort "RabbitMQ connection refused"
 end  
 
-puts "Order notification dispatcher: subscribe messages"
+orderPlacedChannel = messageBroker.createChannel(name: "order.placed") 
+orderPlacedChannel.subscribe { |body|
+  puts " [x] Received #{body}"
 
-orderLogicChannel = messageBroker.createChannel(name: "order.placed") 
-orderLogicChannel.subscribe { |body|
-  puts "Order notification dispatcher: Received #{body}"
-
-#  dispatcherChannel = messageBroker.createChannel(name: "dispatcher.send.email") 
-#  dispatcherChannel.publish(body: "Dispatch a mail")
+  dispatcherSendEmailChannel = messageBroker.createChannel(name: "dispatcher.send.email") 
+  dispatcherSendEmailChannel.publish(body: "Send a new email")
 }
