@@ -21,8 +21,6 @@ services:
       - rabbitmq_network
     volumes:
       - "${APP_FOLDER}:/usr/src/app"
-    tty: true
-    stdin_open: true
 
   order-notifications-dispatcher:
     build: ./order/notifications-dispatcher
@@ -32,5 +30,12 @@ services:
       - rabbitmq_network
     volumes:
       - "${APP_FOLDER}:/usr/src/app"
-    tty: true
-    stdin_open: true
+
+  order-insert-logic:
+    build: ./order/insert-logic
+    image: claclacla/order-insert-logic
+    container_name: OrderInsertLogic
+    networks:
+      - rabbitmq_network
+    volumes:
+      - "${APP_FOLDER}:/usr/src/app"    

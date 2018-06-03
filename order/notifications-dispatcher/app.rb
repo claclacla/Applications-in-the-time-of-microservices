@@ -4,11 +4,20 @@ require_relative '../../lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatche
 dispatcher = RabbitMQDispatcher.new(host: "rabbitmq")
 messageBroker = MessageBroker.new(dispatcher: dispatcher)
 
+puts "Order notification dispatcher: start"
+
 begin
   messageBroker.connect
 rescue MessageBrokerConnectionRefused
   abort "RabbitMQ connection refused"
 end  
 
-channel = messageBroker.createChannel(name: "dispatcher") 
-channel.publish(body: "Hi!")
+puts "Order notification dispatcher: subscribe messages"
+
+orderLogicChannel = messageBroker.createChannel(name: "order.placed") 
+orderLogicChannel.subscribe { |body|
+  puts "Order notification dispatcher: Received #{body}"
+
+#  dispatcherChannel = messageBroker.createChannel(name: "dispatcher.send.email") 
+#  dispatcherChannel.publish(body: "Dispatch a mail")
+}

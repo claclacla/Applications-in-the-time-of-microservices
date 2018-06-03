@@ -13,11 +13,14 @@ class RabbitMQChannel
 
   def subscribe
     begin
-      @queue.subscribe(block: true) do |_delivery_info, _properties, body|
+      @queue.subscribe(block: false) do |_delivery_info, _properties, body|
         yield body
       end
+    #   @queue.subscribe(block: true) do |_delivery_info, _properties, body|
+    #     yield body
+    #   end
     rescue Interrupt => _
-
+      
     end
   end
 
