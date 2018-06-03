@@ -11,9 +11,4 @@ rescue MessageBrokerConnectionRefused
 end  
 
 channel = messageBroker.createChannel(name: "order.placed") 
-channel.subscribe { |body|
-  puts " [x] Received #{body}"
-
-  channel = messageBroker.createChannel(name: "dispatcher.send.email") 
-  channel.publish(body: "Send a new email")
-}
+channel.publish(body: "New order placed")
