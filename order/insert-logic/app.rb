@@ -10,5 +10,10 @@ rescue MessageBrokerConnectionRefused
   abort "RabbitMQ connection refused"
 end  
 
-channel = messageBroker.createChannel(name: "order.placed") 
-channel.publish(body: "New order placed")
+orderPlaceChannel = messageBroker.createChannel(name: "order.place") 
+orderPlaceChannel.subscribe { |payload|
+  puts " [x] Received #{payload}"
+
+  orderPlacedChannel = messageBroker.createChannel(name: "order.placed") 
+  orderPlacedChannel.publish(body: "New order placed")
+}

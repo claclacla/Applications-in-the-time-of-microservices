@@ -44,10 +44,11 @@ docker-compose 1.19.0+
 
 --------------------------------------------------------------------------------
 
-### Production
+### Usage
 
 ```
-# 
+# Verify the microservices environment placing a new order
+curl -X POST localhost:3000/order -d ''
 
 ```
 

@@ -13,6 +13,6 @@ rescue MessageBrokerConnectionRefused
 end  
 
 channel = messageBroker.createChannel(name: "dispatcher.send.email") 
-channel.subscribe { |body|
-  puts " [x] Received #{body}"
+channel.subscribe { |payload|
+  puts " [x] Received #{payload}"
 }
