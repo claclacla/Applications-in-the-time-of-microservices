@@ -21,8 +21,12 @@ class RabbitMQChannel
     end
   end
 
-  def publish body:
-    @connection_channel.default_exchange.publish(body, routing_key: @queue.name)
+  def publish body:, routing_key: @queue.name, correlation_id: nil
+    @connection_channel.default_exchange.publish(
+      body, 
+      routing_key: routing_key, 
+      correlation_id: correlation_id
+    )
   end
 
   implements IChannel
