@@ -13,17 +13,28 @@ services:
     ports:
       - "5672:5672"
 
-  dispatcher-manager:
-    build: ./dispatcher/manager
-    image: claclacla/dispatcher-manager
-    container_name: DispatcherManager
+  api-gateway:
+    build: ./api-gateway
+    image: claclacla/api-gateway
+    container_name: ApiGateway
+    networks:
+      - rabbitmq_network
+    volumes:
+      - "${APP_FOLDER}:/usr/src/app"
+    ports:
+      - "3000:4567"
+
+  order-insert-logic:
+    build: ./order/insert-logic
+    image: claclacla/order-insert-logic
+    container_name: OrderInsertLogic
     networks:
       - rabbitmq_network
     volumes:
       - "${APP_FOLDER}:/usr/src/app"
     tty: true
     stdin_open: true
-    
+
   order-notifications-dispatcher:
     build: ./order/notifications-dispatcher
     image: claclacla/order-notifications-dispatcher
@@ -35,13 +46,13 @@ services:
     tty: true
     stdin_open: true
 
-  order-insert-logic:
-    build: ./order/insert-logic
-    image: claclacla/order-insert-logic
-    container_name: OrderInsertLogic
+  dispatcher-manager:
+    build: ./dispatcher/manager
+    image: claclacla/dispatcher-manager
+    container_name: DispatcherManager
     networks:
       - rabbitmq_network
     volumes:
       - "${APP_FOLDER}:/usr/src/app"
     tty: true
-    stdin_open: true  
+    stdin_open: true
