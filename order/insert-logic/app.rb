@@ -11,7 +11,7 @@ rescue MessageBrokerConnectionRefused
 end  
 
 orderPlaceChannel = messageBroker.createChannel(name: "order.place") 
-orderPlaceChannel.subscribe { |payload|
+orderPlaceChannel.subscribe { |properties, payload|
   puts " [x] Received #{payload}"
 
   orderPlacedChannel = messageBroker.createChannel(name: "order.placed") 
