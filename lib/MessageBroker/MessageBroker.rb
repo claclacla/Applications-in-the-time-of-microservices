@@ -18,5 +18,11 @@ class MessageBroker
     rescue DispatcherConnectionRefused
       raise MessageBrokerConnectionRefused
     end  
-  end 
+  end
+
+  def createTopic name:, routing:
+    topic = @dispatcher.createTopic(name: name, routing: routing)
+
+    return topic
+  end  
 end

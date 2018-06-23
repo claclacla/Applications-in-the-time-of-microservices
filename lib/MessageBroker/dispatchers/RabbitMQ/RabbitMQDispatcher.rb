@@ -1,6 +1,7 @@
 require 'bunny'
 
 require_relative '../IDispatcher'
+require_relative '../../Routing'
 require_relative '../../errors/DispatcherConnectionRefused'
 
 class RabbitMQDispatcher
@@ -24,6 +25,17 @@ class RabbitMQDispatcher
         connectionRetries: connectionRetries
       )
     end
+  end  
+
+  def createTopic name:, routing:
+    case routing
+    when Routing.Wide
+      return @channel.fanout(name)
+    when Routing.Explicit
+      return @channel.direct(name)
+    when Routing.PatternMatching
+      return @channel.topic(name)
+    end  
   end  
 
   implements IDispatcher

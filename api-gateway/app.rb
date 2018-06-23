@@ -2,6 +2,7 @@ require 'sinatra'
 
 require_relative '../lib/MessageBroker/MessageBroker'
 require_relative '../lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
+require_relative '../lib/MessageBroker/Routing'
 
 set :bind, '0.0.0.0'
 
@@ -15,6 +16,6 @@ rescue MessageBrokerConnectionRefused
 end  
 
 post '/order' do
-  #channel = messageBroker.createChannel(name: "order.place") 
+  messageBroker.createTopic(name: "order.place", routing: Routing.Wide)
   #channel.publish(body: "Place a new order")
 end
