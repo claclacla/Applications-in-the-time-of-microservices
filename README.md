@@ -13,15 +13,6 @@ What things you need to install the software
 ```
 docker 17+
 docker-compose 1.19.0+
-```
-
---------------------------------------------------------------------------------
-
-### Installing
-
-```
-# Create a .env file with your local environment variables
-echo "APP_FOLDER=/path-to-your-local/app" > .env 
 
 ```
 
@@ -36,11 +27,14 @@ echo "APP_FOLDER=/path-to-your-local/app" > .env
 
 --------------------------------------------------------------------------------
 
-### Usage
+### Development
 
 ```
 # Change the directory to the docker development 
 cd docker/dev
+
+# Create a .env file with your local environment variables
+echo "APP_FOLDER=/path-to-your-local/app" > .env 
 
 # Run the micro services using docker compose
 sudo docker-compose up -d
