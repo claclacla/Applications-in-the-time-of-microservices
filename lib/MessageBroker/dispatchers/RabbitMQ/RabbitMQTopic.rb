@@ -8,7 +8,7 @@ class RabbitMQTopic
     @exchange = exchange
   end  
 
-  def createList
+  def createRoom
 
   end
 
