@@ -14,5 +14,5 @@ end
 
 channel = messageBroker.createChannel(name: "dispatcher.send.email") 
 channel.subscribe { |properties, payload|
-  puts " [x] Received #{payload}"
+  puts " [x] Received #{payload}" 
 }

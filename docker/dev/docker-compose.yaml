@@ -17,6 +17,8 @@ services:
     build: ./api-gateway
     image: claclacla/api-gateway
     container_name: ApiGateway
+    environment:
+      - APP_ENV=development
     networks:
       - rabbitmq_network
     volumes:
@@ -28,6 +30,8 @@ services:
     build: ./order/insert-logic
     image: claclacla/order-insert-logic
     container_name: OrderInsertLogic
+    environment:
+      - APP_ENV=development
     networks:
       - rabbitmq_network
     volumes:
@@ -39,6 +43,8 @@ services:
     build: ./order/notifications-dispatcher
     image: claclacla/order-notifications-dispatcher
     container_name: OrderNotificationsDispatcher
+    environment:
+      - APP_ENV=development
     networks:
       - rabbitmq_network
     volumes:
@@ -50,6 +56,8 @@ services:
     build: ./dispatcher/manager
     image: claclacla/dispatcher-manager
     container_name: DispatcherManager
+    environment:
+      - APP_ENV=development
     networks:
       - rabbitmq_network
     volumes:
