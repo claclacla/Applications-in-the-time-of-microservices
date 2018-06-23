@@ -1,5 +1,5 @@
 require 'interface'
 
 ITopic = interface {
-  required_methods :createList
+  required_methods :createList, :publish
 }

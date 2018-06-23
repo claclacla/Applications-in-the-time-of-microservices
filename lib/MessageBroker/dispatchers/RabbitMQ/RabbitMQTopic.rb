@@ -12,5 +12,9 @@ class RabbitMQTopic
 
   end
 
+  def publish payload:
+    @exchange.publish(payload)
+  end
+
   implements ITopic
 end

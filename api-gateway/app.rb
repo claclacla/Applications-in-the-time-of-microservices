@@ -17,5 +17,5 @@ end
 
 post '/order' do
   topic = messageBroker.createTopic(name: "order.place", routing: Routing.Wide)
-  #channel.publish(body: "Place a new order")
+  topic.publish(payload: "Place a new order")
 end
