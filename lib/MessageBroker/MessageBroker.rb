@@ -18,14 +18,5 @@ class MessageBroker
     rescue DispatcherConnectionRefused
       raise MessageBrokerConnectionRefused
     end  
-  end
-
-  # TODO: Add a begin/rescue
-
-  def createChannel name:
-    channel = @dispatcher.createChannel(name: name)
-    @channels[name] = channel
-
-    return channel
-  end  
+  end 
 end

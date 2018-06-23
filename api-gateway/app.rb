@@ -15,6 +15,6 @@ rescue MessageBrokerConnectionRefused
 end  
 
 post '/order' do
-  channel = messageBroker.createChannel(name: "order.place") 
-  channel.publish(body: "Place a new order")
+  #channel = messageBroker.createChannel(name: "order.place") 
+  #channel.publish(body: "Place a new order")
 end

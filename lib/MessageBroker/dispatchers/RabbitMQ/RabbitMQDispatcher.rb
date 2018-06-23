@@ -1,17 +1,18 @@
 require 'bunny'
 
 require_relative '../IDispatcher'
-require_relative 'RabbitMQChannel'
 require_relative '../../errors/DispatcherConnectionRefused'
 
 class RabbitMQDispatcher
   def initialize host:
-    @connection = Bunny.new(host: host) 
+    @connection = Bunny.new(host: host)
+    @channel = nil 
   end  
 
   def connect connectionInterval:, connectionRetries: 
     begin  
       @connection.start
+      @channel = @connection.create_channel
     rescue Bunny::TCPConnectionFailedForAllHosts
       sleep connectionInterval
       connectionRetries -= 1
@@ -23,14 +24,6 @@ class RabbitMQDispatcher
         connectionRetries: connectionRetries
       )
     end
-  end  
-
-  # TODO: Add a begin/rescue
-
-  def createChannel name:
-    channel = RabbitMQChannel.new(connection_channel: @connection.create_channel, name: name)
-
-    return channel
   end  
 
   implements IDispatcher
