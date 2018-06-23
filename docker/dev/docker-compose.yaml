@@ -14,10 +14,11 @@ services:
       - "5672:5672"
 
   api-gateway:
-    build: ./api-gateway
-    image: claclacla/api-gateway
+    build: ./ruby-microservice-api
+    image: claclacla/ruby-microservice-api
     container_name: ApiGateway
     environment:
+      - MICROSERVICE_PATH=/usr/src/app/api-gateway/app.rb  
       - APP_ENV=development
     networks:
       - rabbitmq_network
