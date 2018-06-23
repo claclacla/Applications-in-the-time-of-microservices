@@ -14,9 +14,9 @@ end
 topic = messageBroker.createTopic(name: "order", routing: Routing.Wide)
 room = topic.createRoom(name: "place")
 
-#room.subscribe { |properties, payload|
-#   puts " [x] Received #{payload}"
-#}
+room.subscribe { |properties, payload|
+   puts " [x] Received #{payload}"
+}
 
 # orderPlaceChannel = messageBroker.createChannel(name: "order.place") 
 # orderPlaceChannel.subscribe { |properties, payload|
