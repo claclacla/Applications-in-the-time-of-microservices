@@ -1,13 +1,14 @@
-require 'bunny'
-
 require_relative '../ITopic'
 require_relative '../../Routing'
+require_relative './RabbitMQRoom'
 
 class RabbitMQTopic
   def initialize name:, channel:, routing:
     @name = name
     @channel = channel
-    @exchange = nil  
+    @exchange = nil
+    
+    @rooms = []
 
     case routing
     when Routing.Wide
@@ -19,8 +20,11 @@ class RabbitMQTopic
     end
   end  
 
-  def createRoom
-    #q = ch.queue("", :auto_delete => true).bind(x)
+  def createRoom name:
+    room = RabbitMQRoom.new(name: name, channel: @channel, exchange: @exchange)
+    @rooms.append(room)
+
+    return room
   end
 
   def publish payload:
