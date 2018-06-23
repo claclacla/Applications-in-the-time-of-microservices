@@ -16,6 +16,6 @@ rescue MessageBrokerConnectionRefused
 end  
 
 post '/order' do
-  messageBroker.createTopic(name: "order.place", routing: Routing.Wide)
+  topic = messageBroker.createTopic(name: "order.place", routing: Routing.Wide)
   #channel.publish(body: "Place a new order")
 end

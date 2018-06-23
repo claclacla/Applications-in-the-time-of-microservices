@@ -3,11 +3,13 @@ require 'bunny'
 require_relative '../IDispatcher'
 require_relative '../../Routing'
 require_relative '../../errors/DispatcherConnectionRefused'
+require_relative './RabbitMQTopic'
 
 class RabbitMQDispatcher
   def initialize host:
     @connection = Bunny.new(host: host)
     @channel = nil 
+    @topics = []
   end  
 
   def connect connectionInterval:, connectionRetries: 
@@ -28,14 +30,21 @@ class RabbitMQDispatcher
   end  
 
   def createTopic name:, routing:
+    exchange = nil    
+
     case routing
     when Routing.Wide
-      return @channel.fanout(name)
+      exchange = @channel.fanout(name)
     when Routing.Explicit
-      return @channel.direct(name)
+      exchange = @channel.direct(name)
     when Routing.PatternMatching
-      return @channel.topic(name)
-    end  
+      exchange = @channel.topic(name)
+    end
+
+    topic = RabbitMQTopic.new(name: name, exchange: exchange)
+    @topics.push(topic)
+
+    return topic
   end  
 
   implements IDispatcher
