@@ -1,14 +1,21 @@
 require_relative '../IRoom'
+require_relative '../../Routing'
 
 class RabbitMQRoom
-  def initialize name:, channel:, exchange:
+  def initialize name:, routing:, channel:, exchange:
     @name = name
+    @routing = routing
     @channel = channel
-    @exchange = exchange
+    @exchange = exchange      
 
-    # TODO: the following code stands for Routing.Wide only
-
-    @queue = channel.queue(name, :auto_delete => true).bind(exchange)
+    case @routing
+    when Routing.Wide
+      @queue = @channel.queue(@name, :auto_delete => true).bind(@exchange)  
+    when Routing.Explicit
+      @queue = @channel.queue(@name, :auto_delete => true).bind(@exchange, :routing_key => @name)
+    when Routing.PatternMatching
+        
+    end  
   end
 
   def subscribe

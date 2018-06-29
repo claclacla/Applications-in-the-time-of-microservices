@@ -6,11 +6,12 @@ class RabbitMQTopic
   def initialize name:, channel:, routing:
     @name = name
     @channel = channel
+    @routing = routing
     @exchange = nil
     
     @rooms = []
 
-    case routing
+    case @routing
     when Routing.Wide
       @exchange = channel.fanout(name)
     when Routing.Explicit
@@ -21,14 +22,26 @@ class RabbitMQTopic
   end  
 
   def createRoom name:
-    room = RabbitMQRoom.new(name: name, channel: @channel, exchange: @exchange)
+    room = RabbitMQRoom.new(
+      name: name, 
+      routing: @routing, 
+      channel: @channel, 
+      exchange: @exchange
+    )
     @rooms.append(room)
 
     return room
   end
 
-  def publish payload:
-    @exchange.publish(payload)
+  def publish room: nil, payload:
+    case @routing
+    when Routing.Wide
+      @exchange.publish(payload)
+    when Routing.Explicit
+      @exchange.publish(payload, :routing_key => room)
+    when Routing.PatternMatching
+
+    end
   end
 
   implements ITopic

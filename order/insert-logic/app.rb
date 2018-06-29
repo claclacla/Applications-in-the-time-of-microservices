@@ -11,7 +11,7 @@ rescue MessageBrokerConnectionRefused
   abort "RabbitMQ connection refused"
 end  
 
-topic = messageBroker.createTopic(name: "order", routing: Routing.Wide)
+topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
 room = topic.createRoom(name: "place")
 
 room.subscribe { |properties, payload|

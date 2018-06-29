@@ -2,7 +2,37 @@
 
 ## Break up your application into smaller dockerized microservices
 
-Currently under development...
+### Simple topics
+
+#### Send a message
+
+topic = messageBroker.createTopic(name: "order", routing: Routing.Wide)
+topic.publish(payload: "Place a new order")
+
+#### Receive a message
+
+topic = messageBroker.createTopic(name: "order", routing: Routing.Wide)
+room = topic.createRoom(name: "place")
+
+room.subscribe { |properties, payload|
+   puts " [x] Received #{payload}"
+}
+
+### Multi rooms topics
+
+#### Send a message
+
+topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
+topic.publish(room: "place", payload: "Place a new order")
+
+#### Receive a message
+
+topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
+room = topic.createRoom(name: "place")
+
+room.subscribe { |properties, payload|
+   puts " [x] Received #{payload}"
+}
 
 --------------------------------------------------------------------------------
 
