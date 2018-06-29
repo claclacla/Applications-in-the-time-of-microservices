@@ -14,7 +14,7 @@ class RabbitMQRoom
     when Routing.Explicit
       @queue = @channel.queue(@name, :auto_delete => true).bind(@exchange, :routing_key => @name)
     when Routing.PatternMatching
-        
+      @queue = @channel.queue(@name, :auto_delete => true).bind(@exchange, :routing_key => @name)
     end  
   end
 

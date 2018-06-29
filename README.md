@@ -2,14 +2,15 @@
 
 ## Break up your application into smaller dockerized microservices
 
-### Simple topics
+### Wide rooms topics
 
-#### Send a message
+```
+# Send a message
 
 topic = messageBroker.createTopic(name: "order", routing: Routing.Wide)
 topic.publish(payload: "Place a new order")
 
-#### Receive a message
+# Receive a message
 
 topic = messageBroker.createTopic(name: "order", routing: Routing.Wide)
 room = topic.createRoom(name: "place")
@@ -18,14 +19,17 @@ room.subscribe { |properties, payload|
    puts " [x] Received #{payload}"
 }
 
-### Multi rooms topics
+```
 
-#### Send a message
+### Explicit room topics
+
+```
+# Send a message
 
 topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
 topic.publish(room: "place", payload: "Place a new order")
 
-#### Receive a message
+# Receive a message
 
 topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
 room = topic.createRoom(name: "place")
@@ -33,6 +37,27 @@ room = topic.createRoom(name: "place")
 room.subscribe { |properties, payload|
    puts " [x] Received #{payload}"
 }
+
+```
+
+### Pattern matching room topics
+
+```
+# Send a message
+
+topic = messageBroker.createTopic(name: "delivery", routing: Routing.PatternMatching)
+topic.publish(room: "sms.customers", payload: "Important news")
+
+# Receive a message
+
+topic = messageBroker.createTopic(name: "delivery", routing: Routing.PatternMatching)
+room = topic.createRoom(name: "sms.*")
+
+room.subscribe { |properties, payload|
+   puts " [x] Received #{payload}"
+}
+
+```
 
 --------------------------------------------------------------------------------
 

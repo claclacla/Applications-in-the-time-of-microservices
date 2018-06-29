@@ -40,7 +40,7 @@ class RabbitMQTopic
     when Routing.Explicit
       @exchange.publish(payload, :routing_key => room)
     when Routing.PatternMatching
-
+      @exchange.publish(payload, :routing_key => room)
     end
   end
 
