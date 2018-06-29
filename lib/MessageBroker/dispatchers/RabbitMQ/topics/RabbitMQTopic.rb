@@ -1,6 +1,6 @@
-require_relative '../ITopic'
-require_relative '../../Routing'
-require_relative './RabbitMQRoom'
+require_relative '../../ITopic'
+require_relative '../../../Routing'
+require_relative '../rooms/RabbitMQRoom'
 
 class RabbitMQTopic
   def initialize name:, channel:, routing:

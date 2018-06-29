@@ -1,5 +1,5 @@
-require_relative '../IRoom'
-require_relative '../../Routing'
+require_relative '../../IRoom'
+require_relative '../../../Routing'
 
 class RabbitMQRoom
   def initialize name:, routing:, channel:, exchange:

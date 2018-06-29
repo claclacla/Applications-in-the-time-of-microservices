@@ -2,7 +2,7 @@ require 'bunny'
 
 require_relative '../IDispatcher'
 require_relative '../../errors/DispatcherConnectionRefused'
-require_relative './RabbitMQTopic'
+require_relative './topics/RabbitMQTopic'
 
 class RabbitMQDispatcher
   def initialize host:
