@@ -2,7 +2,9 @@ require 'bunny'
 
 require_relative '../IDispatcher'
 require_relative '../../errors/DispatcherConnectionRefused'
-require_relative './topics/RabbitMQTopic'
+require_relative './routings/Wide/WideRabbitMQTopic'
+#require_relative './routings/Explicit/RabbitMQTopicExplicit'
+#require_relative './routings/PatternMatching/RabbitMQTopicPatternMatching'
 
 class RabbitMQDispatcher
   def initialize host:
@@ -29,7 +31,17 @@ class RabbitMQDispatcher
   end  
 
   def createTopic name:, routing:
-    topic = RabbitMQTopic.new(name: name, channel: @channel, routing: routing)
+    topic = nil
+
+    case routing
+    when Routing.Wide
+      topic = WideRabbitMQTopic.new(name: name, channel: @channel)
+    when Routing.Explicit
+#      topic = RabbitMQTopicExplicit.new(name: name, channel: @channel)
+    when Routing.PatternMatching
+#      topic = RabbitMQTopicPatternMatching.new(name: name, channel: @channel)
+    end
+
     @topics.push(topic)
 
     return topic
