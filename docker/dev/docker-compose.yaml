@@ -41,30 +41,30 @@ services:
     tty: true
     stdin_open: true
 
-  # order-notifications-dispatcher:
-  #   build: ./ruby-microservice
-  #   image: claclacla/ruby-microservice
-  #   container_name: OrderNotificationsDispatcher
-  #   environment:
-  #     - MICROSERVICE_PATH=/usr/src/app/order/notifications-dispatcher/app.rb  
-  #     - APP_ENV=development
-  #   networks:
-  #     - rabbitmq_network
-  #   volumes:
-  #     - "${APP_FOLDER}:/usr/src/app"
-  #   tty: true
-  #   stdin_open: true
+  order-notifications-dispatcher:
+    build: ./ruby-microservice
+    image: claclacla/ruby-microservice
+    container_name: OrderNotificationsDispatcher
+    environment:
+      - MICROSERVICE_PATH=/usr/src/app/order/notifications-dispatcher/app.rb  
+      - APP_ENV=development
+    networks:
+      - rabbitmq_network
+    volumes:
+      - "${APP_FOLDER}:/usr/src/app"
+    tty: true
+    stdin_open: true
 
-  # dispatcher-manager:
-  #   build: ./ruby-microservice
-  #   image: claclacla/ruby-microservice
-  #   container_name: DispatcherManager
-  #   environment:
-  #     - MICROSERVICE_PATH=/usr/src/app/dispatcher/manager/app.rb
-  #     - APP_ENV=development
-  #   networks:
-  #     - rabbitmq_network
-  #   volumes:
-  #     - "${APP_FOLDER}:/usr/src/app"
-  #   tty: true
-  #   stdin_open: true
+  dispatcher-manager:
+    build: ./ruby-microservice
+    image: claclacla/ruby-microservice
+    container_name: DispatcherManager
+    environment:
+      - MICROSERVICE_PATH=/usr/src/app/dispatcher/manager/app.rb
+      - APP_ENV=development
+    networks:
+      - rabbitmq_network
+    volumes:
+      - "${APP_FOLDER}:/usr/src/app"
+    tty: true
+    stdin_open: true

@@ -11,11 +11,13 @@ rescue MessageBrokerConnectionRefused
   abort "RabbitMQ connection refused"
 end  
 
-topic = messageBroker.createTopic(name: "order", routing: Routing.PatternMatching)
-room = topic.createRoom(name: "place.*")
+topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
+orderStatusNew = topic.createRoom(name: "status.new")
 
-room.subscribe { |properties, payload|
-   puts " [x] Received #{payload}"
+orderStatusNew.subscribe { |properties, payload|
+  puts " [x] Received #{payload}"
+
+  topic.publish(room: "status.placed", payload: "New order placed")
 }
 
 # orderPlaceChannel = messageBroker.createChannel(name: "order.place") 

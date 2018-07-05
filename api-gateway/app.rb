@@ -15,11 +15,12 @@ rescue MessageBrokerConnectionRefused
   abort "RabbitMQ connection refused"
 end  
 
+#topic = messageBroker.createTopic(name: "order", routing: Routing.Wide)
+topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
+#topic = messageBroker.createTopic(name: "order", routing: Routing.PatternMatching)
+
 post '/order' do
-  #topic = messageBroker.createTopic(name: "order", routing: Routing.Wide)
   #topic.publish(payload: "Place a new order")
-  #topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
-  #topic.publish(room: "place", payload: "Place a new order")
-  topic = messageBroker.createTopic(name: "order", routing: Routing.PatternMatching)
-  topic.publish(room: "place.new", payload: "Place a new order")
+  topic.publish(room: "status.new", payload: "Place a new order")
+  #topic.publish(room: "place.new", payload: "Place a new order")
 end

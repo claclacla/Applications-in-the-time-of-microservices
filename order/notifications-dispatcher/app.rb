@@ -1,21 +1,31 @@
 require_relative '../../lib/MessageBroker/MessageBroker'
 require_relative '../../lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
+require_relative '../../lib/MessageBroker/Routing'
 
 dispatcher = RabbitMQDispatcher.new(host: "rabbitmq")
 messageBroker = MessageBroker.new(dispatcher: dispatcher)
-
-puts "Order notification dispatcher: start"
 
 begin
   messageBroker.connect
 rescue MessageBrokerConnectionRefused
   abort "RabbitMQ connection refused"
-end  
+end 
 
-orderPlacedChannel = messageBroker.createChannel(name: "order.placed") 
-orderPlacedChannel.subscribe { |properties, payload|
+orderTopic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
+orderStatusPlaced = orderTopic.createRoom(name: "status.placed")
+
+dispatcherTopic = messageBroker.createTopic(name: "dispatcher", routing: Routing.PatternMatching)
+
+orderStatusPlaced.subscribe { |properties, payload|
   puts " [x] Received #{payload}"
 
-  dispatcherSendEmailChannel = messageBroker.createChannel(name: "dispatcher.send.email") 
-  dispatcherSendEmailChannel.publish(body: "Send a new email")
+  dispatcherTopic.publish(room: "send.email", payload: "Send a new email")
 }
+
+# orderPlacedChannel = messageBroker.createChannel(name: "order.placed") 
+# orderPlacedChannel.subscribe { |properties, payload|
+#   puts " [x] Received #{payload}"
+
+#   dispatcherSendEmailChannel = messageBroker.createChannel(name: "dispatcher.send.email") 
+#   dispatcherSendEmailChannel.publish(body: "Send a new email")
+# }
