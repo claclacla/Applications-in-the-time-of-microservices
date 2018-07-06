@@ -1,0 +1,17 @@
+{
+  "name": "order-socket",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Order socket",
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "main": "app.js",
+  "dependencies": {
+    "socket.io": "2.1.1"
+  },
+  "devDependencies": {}
+}

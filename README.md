@@ -99,6 +99,17 @@ curl -X POST localhost:3000/order -d ''
 
 ```
 
+#### Docker services
+
+```
+# Order API
+Port: 3000
+
+# Order Socket
+Port: 3001
+
+```
+
 --------------------------------------------------------------------------------
 
 ## Authors
