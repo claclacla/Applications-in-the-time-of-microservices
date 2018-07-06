@@ -1,6 +1,20 @@
 const amqp = require("amqp");
 const server = require('http').createServer();
 
+// Start RabbitMQ connection
+
+var amqpClient = amqp.createConnection({ host: 'rabbitmq' });
+
+amqpClient.on('error', function (e) {
+  console.log("RabbitMQ connection error: " + e);
+});
+
+amqpClient.on('ready', function () {
+  console.log("RabbitMQ connection ready");
+});
+
+// Start Socket.io server
+
 const io = require('socket.io')(server, {
   path: '/order',
   serveClient: false,
@@ -10,6 +24,8 @@ const io = require('socket.io')(server, {
 });
 
 server.listen(3001);
+
+// Wait for connections
 
 io.on('connection', function (socket) {
   let orderNumber = null;
