@@ -5,36 +5,29 @@
   <script src="js/socket.io.js"></script>
   <script>
     $(function () {
-      var socket = io("http://localhost:3001", {path: "/order"});
+      var socket = io("http://localhost:3001", { path: "/order" });
 
       $("#sendMessage").mousedown(() => {
         let number = $("#number").val();
-        socket.emit("message", number);
+        socket.emit("set.order.number", { number });
       });
 
-      socket.on('message', function (msg) {
-        console.log(msg);
-        //$('#messages').append($('<li>').text(msg));
+      socket.on('message.dispatched', function (payload) {
+        $('#dispatch').append($('<li>').text(payload.message));
       });
-      /*
-      $('form').submit(function () {
-        socket.emit('chat message', $('#m').val());
-        $('#m').val('');
-        return false;
-      });
-
-      socket.on('chat message', function (msg) {
-        $('#messages').append($('<li>').text(msg));
-      });
-      */
     });
   </script>
 </head>
 
 <body>
   Order number:
-  <input type="number" id="number"/>
+  <input type="number" id="number" />
   <input type="button" value="Listen" id="sendMessage" />
+  <br />
+  <br /> Dispatch data
+  <br />
+  <ul id="dispatch">
+  </ul>
 </body>
 
 </html>

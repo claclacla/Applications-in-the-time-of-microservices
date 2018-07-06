@@ -10,9 +10,15 @@ const io = require('socket.io')(server, {
 
 server.listen(3001);
 
-io.on('connection', function (socket) { 
-  socket.on('message', function (msg) {
-    socket.emit('message', msg);
+io.on('connection', function (socket) {
+  let orderNumber = null;
+
+  socket.on('set.order.number', function (payload) {
+    orderNumber = payload.number;
+
+    setTimeout(() => {
+      socket.emit('message.dispatched', { message: "A new email for the order N." + orderNumber });
+    }, 2000);
   });
 
   socket.on('disconnect', function () {
