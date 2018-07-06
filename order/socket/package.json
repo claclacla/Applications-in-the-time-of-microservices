@@ -11,7 +11,8 @@
   },
   "main": "app.js",
   "dependencies": {
-    "socket.io": "2.1.1"
+    "socket.io": "2.1.1",
+    "amqp": "0.2.6"
   },
   "devDependencies": {}
 }
