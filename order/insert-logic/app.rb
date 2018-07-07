@@ -1,3 +1,5 @@
+require 'json'
+
 require_relative '../../lib/MessageBroker/MessageBroker'
 require_relative '../../lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
 require_relative '../../lib/MessageBroker/Routing'
@@ -12,18 +14,23 @@ rescue MessageBrokerConnectionRefused
 end  
 
 topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
-orderStatusNew = topic.createRoom(name: "status.new")
+onPlaceOrder = topic.createRoom(name: "on.place")
 
-orderStatusNew.subscribe { |properties, payload|
+orderNumber = 1
+
+onPlaceOrder.subscribe { |properties, payload|
   puts " [x] Received #{payload}"
 
-  topic.publish(room: "status.placed", payload: "New order placed")
+  # Order insert logic operations
+
+  # ...
+
+  order = JSON.parse payload
+  order["number"] = orderNumber
+
+  orderNumber += 1
+
+  # ...
+
+  topic.publish(room: "on.placed", payload: JSON.generate(order))
 }
-
-# orderPlaceChannel = messageBroker.createChannel(name: "order.place") 
-# orderPlaceChannel.subscribe { |properties, payload|
-#   puts " [x] Received #{payload}"
-
-#   orderPlacedChannel = messageBroker.createChannel(name: "order.placed") 
-#   orderPlacedChannel.publish(body: "New order placed")
-# }

@@ -1,3 +1,6 @@
+require 'json'
+require 'net/http'
+
 require_relative '../../lib/MessageBroker/MessageBroker'
 require_relative '../../lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
 require_relative '../../lib/MessageBroker/Routing'
@@ -12,20 +15,32 @@ rescue MessageBrokerConnectionRefused
 end 
 
 orderTopic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
-orderStatusPlaced = orderTopic.createRoom(name: "status.placed")
+onOrderPlaced = orderTopic.createRoom(name: "on.placed")
 
-dispatcherTopic = messageBroker.createTopic(name: "dispatcher", routing: Routing.PatternMatching)
-
-orderStatusPlaced.subscribe { |properties, payload|
+onOrderPlaced.subscribe { |properties, payload|
   puts " [x] Received #{payload}"
 
-  dispatcherTopic.publish(room: "send.email", payload: "Send a new email")
+  order = JSON.parse payload
+  message = {
+    "from" => "info@shop.com",
+    "to" => order["user"]["email"],
+    "title" => "New order",
+    "body" => "New order"
+  }
+
+  # TODO: write a repository for this internal service
+
+  url = URI.parse('http://dispatcher-manager:4567/email')
+
+  header = {'Content-Type': 'text/json'}
+
+  req = Net::HTTP::Post.new(url.to_s, header)
+  req.body = message.to_json
+
+  res = Net::HTTP.start(url.host, url.port) {|http|
+    http.request(req)
+  }
+
+  puts res.body
+  #dispatcherTopic.publish(room: "send.email", payload: "Send a new email")
 }
-
-# orderPlacedChannel = messageBroker.createChannel(name: "order.placed") 
-# orderPlacedChannel.subscribe { |properties, payload|
-#   puts " [x] Received #{payload}"
-
-#   dispatcherSendEmailChannel = messageBroker.createChannel(name: "dispatcher.send.email") 
-#   dispatcherSendEmailChannel.publish(body: "Send a new email")
-# }

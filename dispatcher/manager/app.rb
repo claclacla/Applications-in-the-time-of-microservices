@@ -1,24 +1,18 @@
-require_relative '../../lib/MessageBroker/MessageBroker'
-require_relative '../../lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
-require_relative '../../lib/MessageBroker/Routing'
+require 'json'
+require 'sinatra'
 
-dispatcher = RabbitMQDispatcher.new(host: "rabbitmq")
-messageBroker = MessageBroker.new(dispatcher: dispatcher)
+set :bind, '0.0.0.0'
 
-begin
-  messageBroker.connect
-rescue MessageBrokerConnectionRefused
-  abort "RabbitMQ connection refused"
+# TODO: This endpoint may have a response with a 201 status
+# TODO: Complete the definition of the response object
+
+post '/email' do
+  message = JSON.parse request.body.read
+
+  # Dispatcher manager operations
+
+  # ...
+
+  content_type :json
+  { :receipt => 'D9r8Gu39r8B2G3ur' }.to_json
 end
-
-topic = messageBroker.createTopic(name: "dispatcher", routing: Routing.PatternMatching)
-dispatcherSend = topic.createRoom(name: "send.*")
-
-dispatcherSend.subscribe { |properties, payload|
-  puts " [x] Received #{payload}"
-}
-
-# channel = messageBroker.createChannel(name: "dispatcher.send.email") 
-# channel.subscribe { |properties, payload|
-#   puts " [x] Received #{payload}" 
-# }

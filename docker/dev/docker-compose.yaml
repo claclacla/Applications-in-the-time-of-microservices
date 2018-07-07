@@ -56,8 +56,8 @@ services:
     stdin_open: true
 
   dispatcher-manager:
-    build: ./ruby-microservice
-    image: claclacla/ruby-microservice
+    build: ./ruby-microservice-api
+    image: claclacla/ruby-microservice-api
     container_name: DispatcherManager
     environment:
       - MICROSERVICE_PATH=/usr/src/app/dispatcher/manager/app.rb
