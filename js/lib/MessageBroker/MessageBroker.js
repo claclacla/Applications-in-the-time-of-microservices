@@ -11,8 +11,11 @@ class MessageBroker {
       await this.dispatcher.connect({
         connectionInterval: this.connectionInterval,
         connectionRetries: this.connectionRetries
-      }) 
+      })
     } catch (error) {
+
+      // TODO: Create an application error
+
       throw new Error("MessageBroker connection refused");
     }
   }

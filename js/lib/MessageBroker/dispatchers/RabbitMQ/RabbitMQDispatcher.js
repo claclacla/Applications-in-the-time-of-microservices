@@ -11,7 +11,7 @@ class RabbitMQDispatcher extends IDispatcher {
   }
 
   _openConnection() {
-    return new Promise((resolve, reject) => {      
+    return new Promise((resolve, reject) => {
       amqp.connect(this.host, (err, conn) => {
         if (err) {
           return reject(err);
@@ -33,6 +33,8 @@ class RabbitMQDispatcher extends IDispatcher {
         await sleep(connectionInterval);
       }
     }
+
+    // TODO: Create an application error
 
     throw new Error("Dispatcher connection refused");
   }
