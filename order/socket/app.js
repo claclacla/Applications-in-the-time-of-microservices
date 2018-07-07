@@ -1,38 +1,30 @@
-//const amqp = require("amqp");
 const server = require('http').createServer();
+const amqp = require('amqplib/callback_api');
+const PubSub = require("pubsub-js");
 
-var amqp = require('amqplib/callback_api');
+let channel = null;
 
 amqp.connect('amqp://rabbitmq', function(err, conn) {
   conn.createChannel(function(err, ch) {
-    var ex = 'order';
+    channel = ch;
+    let ex = 'order';
 
-    ch.assertExchange(ex, 'direct', {durable: false});
+    channel.assertExchange(ex, 'direct', {durable: false});
 
-    ch.assertQueue('on.email.sent', {exclusive: true}, function(err, q) {
+    channel.assertQueue('on.email.sent', {exclusive: true}, function(err, q) {
       console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q.queue);
-      ch.bindQueue(q.queue, ex, 'on.email.sent');
+      channel.bindQueue(q.queue, ex, 'on.email.sent');
 
-      ch.consume(q.queue, function(msg) {
-        console.log(" [x] %s", msg.content.toString());
+      channel.consume(q.queue, function(msg) {
+        let content = msg.content;
+
+        console.log(" [x] %s", content.toString());
+
+        PubSub.publish("on.email.sent", JSON.parse(content));
       }, {noAck: true});
     });
   });
 });
-
-/*
-// Start RabbitMQ connection
-
-var amqpClient = amqp.createConnection({ host: 'rabbitmq' });
-
-amqpClient.on('error', function (e) {
-  console.log("RabbitMQ connection error: " + e);
-});
-
-amqpClient.on('ready', function () {
-  console.log("RabbitMQ connection ready");
-});
-*/
 
 // Start Socket.io server
 
@@ -52,11 +44,22 @@ io.on('connection', function (socket) {
   let orderNumber = null;
 
   socket.on('set.order.number', function (payload) {
-    orderNumber = payload.number;
 
-    setTimeout(() => {
+    // TODO: Add number verification
+
+    orderNumber = parseInt(payload.number);
+
+    PubSub.subscribe("on.email.sent", (msg, data) => {
+      console.log(orderNumber, data);
+      
+      if(data.order.number !== orderNumber) {
+        return;
+      }
+
+      console.log("emit to: " + orderNumber);
+      
       socket.emit('message.dispatched', { message: "A new email for the order N." + orderNumber });
-    }, 2000);
+    });
   });
 
   socket.on('disconnect', function () {
