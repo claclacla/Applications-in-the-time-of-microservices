@@ -6,9 +6,6 @@
   "keywords": [],
   "author": "",
   "license": "",
-  "scripts": {
-    "start": "node app.js"
-  },
   "main": "app.js",
   "dependencies": {
     "socket.io": "2.1.1",
