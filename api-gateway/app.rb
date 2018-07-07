@@ -25,5 +25,5 @@ topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
 post '/order' do
   order = JSON.parse request.body.read
 
-  topic.publish(room: "on.place", payload: JSON.generate(order))
+  topic.publish(room: "on.place", payload: order.to_json)
 end

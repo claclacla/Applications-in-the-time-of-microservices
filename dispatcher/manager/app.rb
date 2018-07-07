@@ -7,6 +7,9 @@ set :bind, '0.0.0.0'
 # TODO: Complete the definition of the response object
 
 post '/email' do
+
+  # TODO: Add a message verification
+
   message = JSON.parse request.body.read
 
   # Dispatcher manager operations
@@ -14,5 +17,5 @@ post '/email' do
   # ...
 
   content_type :json
-  { :receipt => 'D9r8Gu39r8B2G3ur' }.to_json
+  { :code => 'D9r8Gu39r8B2G3ur' }.to_json
 end

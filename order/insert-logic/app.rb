@@ -32,5 +32,5 @@ onPlaceOrder.subscribe { |properties, payload|
 
   # ...
 
-  topic.publish(room: "on.placed", payload: JSON.generate(order))
+  topic.publish(room: "on.placed", payload: order.to_json)
 }

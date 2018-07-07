@@ -21,6 +21,9 @@ onOrderPlaced.subscribe { |properties, payload|
   puts " [x] Received #{payload}"
 
   order = JSON.parse payload
+
+  # TODO: Create a DTO for this object
+
   message = {
     "from" => "info@shop.com",
     "to" => order["user"]["email"],
@@ -41,6 +44,20 @@ onOrderPlaced.subscribe { |properties, payload|
     http.request(req)
   }
 
-  puts res.body
-  #dispatcherTopic.publish(room: "send.email", payload: "Send a new email")
+  # TODO: Add a response verification
+
+  dispatcherManagerReceipt = JSON.parse res.body
+
+  # TODO: Create a DTO for this object
+
+  emailSentData = {
+    "order" => {
+      "number" => order["number"]
+    },
+    "receipt" => {
+      "code" => dispatcherManagerReceipt["code"]
+    }
+  }
+
+  orderTopic.publish(room: "on.email.sent", payload: emailSentData.to_json)
 }
