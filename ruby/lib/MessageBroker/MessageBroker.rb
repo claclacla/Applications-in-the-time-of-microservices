@@ -4,7 +4,6 @@ class MessageBroker
   def initialize dispatcher:
     @CONNECTION_RETRIES = 10
     @CONNECTION_INTERVAL = 2
-    @channels = Hash.new
 
     @dispatcher = dispatcher 
   end   

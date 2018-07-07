@@ -1,9 +1,11 @@
 const server = require('http').createServer();
 const PubSub = require("pubsub-js");
 
+const RabbitMQDispatcher = require("../../js/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher");
 const MessageBroker = require("../../js/lib/MessageBroker/MessageBroker");
 
-let messageBroker = new MessageBroker();
+const rabbitMQDispatcher = new RabbitMQDispatcher({ host: 'amqp://rabbitmq' });
+let messageBroker = new MessageBroker(rabbitMQDispatcher);
 
 messageBroker.connect().then(() => {
   console.log("Connection created");
