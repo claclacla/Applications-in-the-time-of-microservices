@@ -58,7 +58,7 @@ class RabbitMQDispatcher extends IDispatcher {
     throw new Error("Dispatcher connection refused");
   }
 
-  async createTopic({ name, routing }) {
+  createTopic({ name, routing }) {
     let topic = null;
 
     // TODO: Add the other two cases

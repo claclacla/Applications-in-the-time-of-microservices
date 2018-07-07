@@ -1,8 +1,11 @@
 const BaseRabbitMQTopic = require("../BaseRabbitMQTopic");
 
 class ExplicitRabbitMQTopic extends BaseRabbitMQTopic {
-  constructor() {
+  constructor({ name, channel }) {
     super();
+
+    this.channel = channel;
+    channel.assertExchange(name, 'direct', {durable: false});
   }
 
   createRoom() {
@@ -10,7 +13,7 @@ class ExplicitRabbitMQTopic extends BaseRabbitMQTopic {
   }
 
   publish() {
-    
+
   }
 }
 

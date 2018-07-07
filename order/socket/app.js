@@ -3,18 +3,21 @@ const PubSub = require("pubsub-js");
 
 const RabbitMQDispatcher = require("../../js/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher");
 const MessageBroker = require("../../js/lib/MessageBroker/MessageBroker");
+const Routing = require("../../js/lib/MessageBroker/Routing");
 
 (async () => {
   const rabbitMQDispatcher = new RabbitMQDispatcher({ host: 'amqp://rabbitmq' });
   const messageBroker = new MessageBroker(rabbitMQDispatcher);
-  
+
   try {
     await messageBroker.connect();
-    console.log("Connection created");    
+    console.log("Connection created");
   } catch (error) {
     console.log(error);
-    return; 
+    return;
   }
+
+  let topic = messageBroker.createTopic({ name: "order", routing: Routing.Explicit })
 
   /*
   amqp.connect('amqp://rabbitmq', function(err, conn) {
