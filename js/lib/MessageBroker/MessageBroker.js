@@ -20,8 +20,10 @@ class MessageBroker {
     }
   }
 
-  createTopic() {
-
+  async createTopic({ name, routing }) {
+    let topic = await this.dispatcher.createTopic({ name, routing });
+    
+    return topic;
   }
 }
 

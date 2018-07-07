@@ -4,8 +4,6 @@ class IDispatcher {
       throw new Error("host is a required parameter");
     }
 
-    this.host = host;
-
     if (this.connect === undefined) {
       throw new Error(".connect() is a required method");
     }
@@ -13,6 +11,10 @@ class IDispatcher {
     if (this.createTopic === undefined) {
       throw new Error(".createTopic() is a required method");
     }
+
+    this.host = host;
+    this.channel = null;
+    this.topics = [];
   }
 }
 

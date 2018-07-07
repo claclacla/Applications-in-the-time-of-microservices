@@ -5,9 +5,9 @@ const RabbitMQDispatcher = require("../../js/lib/MessageBroker/dispatchers/Rabbi
 const MessageBroker = require("../../js/lib/MessageBroker/MessageBroker");
 
 (async () => {
-  const rabbitMQDispatcher = new RabbitMQDispatcher({ host: 'amqp://rabbitmq2' });
+  const rabbitMQDispatcher = new RabbitMQDispatcher({ host: 'amqp://rabbitmq' });
   const messageBroker = new MessageBroker(rabbitMQDispatcher);
-
+  
   try {
     await messageBroker.connect();
     console.log("Connection created");    
