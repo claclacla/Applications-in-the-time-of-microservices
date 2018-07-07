@@ -1,8 +1,8 @@
 require 'json'
 
-require_relative '../../lib/MessageBroker/MessageBroker'
-require_relative '../../lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
-require_relative '../../lib/MessageBroker/Routing'
+require_relative '../../ruby/lib/MessageBroker/MessageBroker'
+require_relative '../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
+require_relative '../../ruby/lib/MessageBroker/Routing'
 
 dispatcher = RabbitMQDispatcher.new(host: "rabbitmq")
 messageBroker = MessageBroker.new(dispatcher: dispatcher)

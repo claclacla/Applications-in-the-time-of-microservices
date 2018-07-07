@@ -1,9 +1,9 @@
 require 'json'
 require 'sinatra'
 
-require_relative '../lib/MessageBroker/MessageBroker'
-require_relative '../lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
-require_relative '../lib/MessageBroker/Routing'
+require_relative '../ruby/lib/MessageBroker/MessageBroker'
+require_relative '../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
+require_relative '../ruby/lib/MessageBroker/Routing'
 
 set :bind, '0.0.0.0'
 
