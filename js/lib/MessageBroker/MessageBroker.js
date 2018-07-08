@@ -21,7 +21,7 @@ class MessageBroker {
   }
 
   createTopic({ name, routing }) {
-    let topic = await this.dispatcher.createTopic({ name, routing });
+    let topic = this.dispatcher.createTopic({ name, routing });
 
     return topic;
   }

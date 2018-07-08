@@ -17,7 +17,15 @@ const Routing = require("../../js/lib/MessageBroker/Routing");
     return;
   }
 
-  let topic = messageBroker.createTopic({ name: "order", routing: Routing.Explicit })
+  let topic = messageBroker.createTopic({ name: "order", routing: Routing.Explicit });
+  let room = await topic.createRoom({ name: "on.email.sent" });
+
+  room.subscribe((msg) => {
+    let content = msg.content;
+    console.log(" [x] %s", content.toString());
+
+    PubSub.publish("on.email.sent", JSON.parse(content));
+  });
 
   /*
   amqp.connect('amqp://rabbitmq', function(err, conn) {

@@ -13,70 +13,70 @@ services:
     ports:
       - "5672:5672"
 
-#  api-gateway:
-#    build: ./ruby-microservice-api
-#    image: claclacla/ruby-microservice-api
-#    container_name: ApiGateway
-#    environment:
-#      - MICROSERVICE_PATH=/usr/src/app/api-gateway/app.rb  
-#      - APP_ENV=development
-#    networks:
-#      - rabbitmq_network
-#    volumes:
-#      - "${APP_FOLDER}:/usr/src/app"
-#    ports:
-#      - "3000:4567"
-#
-#  order-insert-logic:
-#    build: ./ruby-microservice
-#    image: claclacla/ruby-microservice
-#    container_name: OrderInsertLogic
-#    environment:
-#      - MICROSERVICE_PATH=/usr/src/app/order/insert-logic/app.rb  
-#      - APP_ENV=development
-#    networks:
-#      - rabbitmq_network
-#    volumes:
-#      - "${APP_FOLDER}:/usr/src/app"
-#    tty: true
-#    stdin_open: true
-#
-#  order-notifications-dispatcher:
-#    build: ./ruby-microservice
-#    image: claclacla/ruby-microservice
-#    container_name: OrderNotificationsDispatcher
-#    environment:
-#      - MICROSERVICE_PATH=/usr/src/app/order/notifications-dispatcher/app.rb  
-#      - APP_ENV=development
-#    networks:
-#      - rabbitmq_network
-#    volumes:
-#      - "${APP_FOLDER}:/usr/src/app"
-#    tty: true
-#    stdin_open: true
-#
-#  dispatcher-manager:
-#    build: ./ruby-microservice-api
-#    image: claclacla/ruby-microservice-api
-#    container_name: DispatcherManager
-#    environment:
-#      - MICROSERVICE_PATH=/usr/src/app/dispatcher/manager/app.rb
-#      - APP_ENV=development
-#    networks:
-#      - rabbitmq_network
-#    volumes:
-#      - "${APP_FOLDER}:/usr/src/app"
-#    tty: true
-#    stdin_open: true
-#
-#  web-server:
-#    build: ./web-server
-#    image: claclacla/spa-http-server
-#    container_name: WebServer
-#    ports:
-#      - 8080:8080
-#    volumes:
-#      - "${APP_FOLDER}/docker/dev/web-server/public:/usr/src/app"
+  api-gateway:
+    build: ./ruby-microservice-api
+    image: claclacla/ruby-microservice-api
+    container_name: ApiGateway
+    environment:
+      - MICROSERVICE_PATH=/usr/src/app/api-gateway/app.rb  
+      - APP_ENV=development
+    networks:
+      - rabbitmq_network
+    volumes:
+      - "${APP_FOLDER}:/usr/src/app"
+    ports:
+      - "3000:4567"
+
+  order-insert-logic:
+    build: ./ruby-microservice
+    image: claclacla/ruby-microservice
+    container_name: OrderInsertLogic
+    environment:
+      - MICROSERVICE_PATH=/usr/src/app/order/insert-logic/app.rb  
+      - APP_ENV=development
+    networks:
+      - rabbitmq_network
+    volumes:
+      - "${APP_FOLDER}:/usr/src/app"
+    tty: true
+    stdin_open: true
+
+  order-notifications-dispatcher:
+    build: ./ruby-microservice
+    image: claclacla/ruby-microservice
+    container_name: OrderNotificationsDispatcher
+    environment:
+      - MICROSERVICE_PATH=/usr/src/app/order/notifications-dispatcher/app.rb  
+      - APP_ENV=development
+    networks:
+      - rabbitmq_network
+    volumes:
+      - "${APP_FOLDER}:/usr/src/app"
+    tty: true
+    stdin_open: true
+
+  dispatcher-manager:
+    build: ./ruby-microservice-api
+    image: claclacla/ruby-microservice-api
+    container_name: DispatcherManager
+    environment:
+      - MICROSERVICE_PATH=/usr/src/app/dispatcher/manager/app.rb
+      - APP_ENV=development
+    networks:
+      - rabbitmq_network
+    volumes:
+      - "${APP_FOLDER}:/usr/src/app"
+    tty: true
+    stdin_open: true
+
+  web-server:
+    build: ./web-server
+    image: claclacla/spa-http-server
+    container_name: WebServer
+    ports:
+      - 8080:8080
+    volumes:
+      - "${APP_FOLDER}/docker/dev/web-server/public:/usr/src/app"
 
   order-socket:
     build: ./socket

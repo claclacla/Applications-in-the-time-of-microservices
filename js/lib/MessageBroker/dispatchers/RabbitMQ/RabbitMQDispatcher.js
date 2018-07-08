@@ -65,7 +65,8 @@ class RabbitMQDispatcher extends IDispatcher {
 
     switch (routing) {
       case Routing.Explicit:
-        topic = new ExplicitRabbitMQTopic({ name, channel: this.channel })
+        topic = new ExplicitRabbitMQTopic({ name, channel: this.channel });
+        
         break;
     }
 
