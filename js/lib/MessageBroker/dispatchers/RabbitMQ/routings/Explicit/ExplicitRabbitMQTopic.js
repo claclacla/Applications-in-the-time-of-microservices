@@ -22,8 +22,8 @@ class ExplicitRabbitMQTopic extends BaseRabbitMQTopic {
     return room;
   }
 
-  publish() {
-
+  publish({ room, payload }) {
+    this.channel.publish(this.name, room, new Buffer(payload));
   }
 }
 

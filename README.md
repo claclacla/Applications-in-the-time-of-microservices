@@ -2,9 +2,11 @@
 
 ## Break up your application into smaller dockerized microservices
 
-### Wide rooms topics
+### MessageBroker library
 
-```
+#### Wide rooms topics
+
+```ruby
 # Send a message
 
 topic = messageBroker.createTopic(name: "order", routing: Routing.Wide)
@@ -21,9 +23,9 @@ room.subscribe { |properties, payload|
 
 ```
 
-### Explicit room topics
+#### Explicit room topics
 
-```
+```ruby
 # Send a message
 
 topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
@@ -40,9 +42,9 @@ room.subscribe { |properties, payload|
 
 ```
 
-### Pattern matching room topics
+#### Pattern matching room topics
 
-```
+```ruby
 # Send a message
 
 topic = messageBroker.createTopic(name: "delivery", routing: Routing.PatternMatching)
