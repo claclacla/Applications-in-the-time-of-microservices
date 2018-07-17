@@ -7,8 +7,8 @@ class BaseRabbitMQRoom
 
   def subscribe
     begin
-      @queue.subscribe(block: true) do |_delivery_info, properties, payload|
-        yield properties, payload
+      @queue.subscribe(block: true) do |delivery_info, properties, payload|
+        yield delivery_info, properties, payload
       end
     rescue Interrupt => _
       
