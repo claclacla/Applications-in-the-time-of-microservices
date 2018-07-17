@@ -4,6 +4,7 @@ const sleep = require("../../../sleep");
 const IDispatcher = require("../IDispatcher");
 const Routing = require("../../Routing");
 const ExplicitRabbitMQTopic = require("./routings/Explicit/ExplicitRabbitMQTopic");
+const PatternMatchingRabbitMQTopic = require("./routings/PatternMatching/PatternMatchingRabbitMQTopic");
 
 class RabbitMQDispatcher extends IDispatcher {
   constructor({ host }) {
@@ -41,8 +42,6 @@ class RabbitMQDispatcher extends IDispatcher {
 
   async connect({ connectionInterval, connectionRetries }) {
     for (let i = 0; i < connectionRetries; i++) {
-      console.log(i);
-
       try {
         this.conn = await this._openConnection();
         this.channel = await this._createChannel();
@@ -66,7 +65,9 @@ class RabbitMQDispatcher extends IDispatcher {
     switch (routing) {
       case Routing.Explicit:
         topic = new ExplicitRabbitMQTopic({ name, channel: this.channel });
-        
+        break;
+      case Routing.PatternMatching:
+        topic = new PatternMatchingRabbitMQTopic({ name, channel: this.channel });
         break;
     }
 

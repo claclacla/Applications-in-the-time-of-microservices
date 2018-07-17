@@ -1,17 +1,17 @@
 const BaseRabbitMQTopic = require("../BaseRabbitMQTopic");
-const ExplicitRabbitMQRoom = require("./ExplicitRabbitMQRoom");
+const PatternMatchingRabbitMQRoom = require("./PatternMatchingRabbitMQRoom");
 
-class ExplicitRabbitMQTopic extends BaseRabbitMQTopic {
+class PatternMatchingRabbitMQTopic extends BaseRabbitMQTopic {
   constructor({ name, channel }) {
     super();
 
     this.name = name;
     this.channel = channel;
-    this.channel.assertExchange(name, 'direct', {durable: false});
+    channel.assertExchange(name, 'topic', {durable: false});
   }
 
   async createRoom({ name }) {
-    let room = await ExplicitRabbitMQRoom.create({ 
+    let room = await PatternMatchingRabbitMQRoom.create({ 
       name, 
       topicName: this.name, 
       channel: this.channel 
@@ -27,4 +27,4 @@ class ExplicitRabbitMQTopic extends BaseRabbitMQTopic {
   }
 }
 
-module.exports = ExplicitRabbitMQTopic
+module.exports = PatternMatchingRabbitMQTopic
