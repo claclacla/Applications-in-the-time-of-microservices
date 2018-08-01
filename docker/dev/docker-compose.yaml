@@ -14,18 +14,19 @@ services:
       - "5672:5672"
 
   api-gateway:
-    build: ./ruby-microservice-api
-    image: claclacla/ruby-microservice-api
+    build: ./api-gateway
+    image: claclacla/api-gateway
     container_name: ApiGateway
     environment:
-      - MICROSERVICE_PATH=/usr/src/app/api-gateway/app.rb  
       - APP_ENV=development
     networks:
       - rabbitmq_network
+    ports:
+      - 3000:3000
     volumes:
       - "${APP_FOLDER}:/usr/src/app"
-    ports:
-      - "3000:4567"
+    tty: true
+    stdin_open: true
 
   order-insert-logic:
     build: ./ruby-microservice
@@ -79,8 +80,8 @@ services:
       - "${APP_FOLDER}/docker/dev/web-server/public:/usr/src/app"
 
   order-socket:
-    build: ./socket
-    image: claclacla/socket
+    build: ./js-microservice
+    image: claclacla/js-microservice
     container_name: OrderSocket
     environment:
       - MICROSERVICE_PATH=/usr/src/app/order/socket/app.js

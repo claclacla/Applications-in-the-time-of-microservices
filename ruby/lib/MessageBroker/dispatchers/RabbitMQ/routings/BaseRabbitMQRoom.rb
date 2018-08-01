@@ -5,13 +5,14 @@ class BaseRabbitMQRoom
     @queue = queue
   end
 
-  def subscribe
+  def subscribe block: true
     begin
-      @queue.subscribe(block: true) do |delivery_info, properties, payload|
+      @queue.subscribe(block: block) do |delivery_info, properties, payload|
+        puts "subscribe 1"
         yield delivery_info, properties, payload
       end
     rescue Interrupt => _
-      
+    
     end
   end
 

@@ -5,28 +5,40 @@
   <script src="js/socket.io.js"></script>
   <script>
     $(function () {
-      var socket = io("http://localhost:3001", { path: "/order" });
+      let socket = io("http://localhost:3001", { path: "/order" });
 
-      $("#sendMessage").mousedown(() => {
-        let number = $("#number").val();
+      $("#insertOrder").mousedown(() => {
+        let order = {
+          "user": {
+            "name": "Simone", 
+            "email": "info@claclacla.com", 
+            "mobile": "321987654"
+          }
+        };
+
+        $.post({
+          url: "http://localhost:3000",
+          data: order,
+          success: () => {
+            $('#messages').append($('<li>').text("Order placed!"));
+          }
+        });
+
         socket.emit("set.order.number", { number });
       });
 
       socket.on('message.dispatched', function (payload) {
-        $('#dispatch').append($('<li>').text(payload.message));
+        $('#messages').append($('<li>').text(payload.message));
       });
     });
   </script>
 </head>
 
 <body>
-  Order number:
-  <input type="number" id="number" />
-  <input type="button" value="Listen" id="sendMessage" />
+  <input type="button" value="Insert order" id="insertOrder" />
   <br />
-  <br /> Dispatch data
   <br />
-  <ul id="dispatch">
+  <ul id="messages">
   </ul>
 </body>
 

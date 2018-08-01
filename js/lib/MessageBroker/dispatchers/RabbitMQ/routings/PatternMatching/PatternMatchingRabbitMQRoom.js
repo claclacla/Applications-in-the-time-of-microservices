@@ -6,17 +6,14 @@ class PatternMatchingRabbitMQRoom extends BaseRabbitMQRoom {
   }
 
   static async create({ name, topicName, channel }) {
-    return new Promise((resolve, reject) => {
-      channel.assertQueue(name, { exclusive: true }, function (err, q) {
-        if (err) {
-          return reject(err);
-        }
-        
-        channel.bindQueue(q.queue, topicName, name);
+    try {
+      let q = await channel.assertQueue(); 
+      channel.bindQueue(q.queue, topicName, name);
 
-        resolve(new PatternMatchingRabbitMQRoom({ channel, queue: q.queue }));
-      });
-    });
+      return new PatternMatchingRabbitMQRoom({ channel, queue: q.queue })
+    } catch (error) {
+      throw new Error("Pattern matching RabbitMQ room creation error");
+    }
   }
 }
 

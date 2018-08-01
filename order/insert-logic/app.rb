@@ -18,7 +18,7 @@ onPlaceOrder = topic.createRoom(name: "on.place")
 
 orderNumber = 1
 
-onPlaceOrder.subscribe { |properties, payload|
+onPlaceOrder.subscribe { |delivery_info, properties, payload|
   puts " [x] Received #{payload}"
 
   # Order insert logic operations
@@ -32,5 +32,6 @@ onPlaceOrder.subscribe { |properties, payload|
 
   # ...
 
+  puts "Order placed"
   topic.publish(room: "on.placed", payload: order.to_json)
 }

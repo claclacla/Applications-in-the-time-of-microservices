@@ -27,38 +27,6 @@ const Routing = require("../../js/lib/MessageBroker/Routing");
     PubSub.publish("on.email.sent", JSON.parse(content));
   });
 
-  /*
-  amqp.connect('amqp://rabbitmq', function(err, conn) {
-    console.log("Create channel");
-    
-    conn.createChannel(function(err, ch) {
-      console.log("Channel created");
-      
-      let channel = ch;
-      let ex = 'order';
-  
-      console.log("Create topic");
-      
-      channel.assertExchange(ex, 'direct', {durable: false});
-  
-      console.log("Create room");
-      
-      channel.assertQueue('on.email.sent', {exclusive: true}, function(err, q) {
-        console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q.queue);
-        channel.bindQueue(q.queue, ex, 'on.email.sent');
-  
-        channel.consume(q.queue, function(msg) {
-          let content = msg.content;
-  
-          console.log(" [x] %s", content.toString());
-  
-          PubSub.publish("on.email.sent", JSON.parse(content));
-        }, {noAck: true});
-      });
-    });
-  });
-  */
-
   // Start Socket.io server
 
   const io = require('socket.io')(server, {

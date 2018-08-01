@@ -2,9 +2,27 @@
 
 ## Break up your application into smaller dockerized microservices
 
+Microservices have redefined the way applications are built.
+Software architecture has changed and nowadays based on an environment of many different applications.
+
+Each service is extremely specialized and actually responsible for just one task.
+
+This repository is a dockerized environment of microservices that handles the placement of an order.
+
+The interaction among services is provided by the MessageBroker library.
+
 ### MessageBroker library
 
-#### Wide rooms topics
+This library, created for both languages `Javascript` and `Ruby`, is an abstraction layer over `RabbitMQ`. 
+It allows the communication among the microservices, providing functionality for publishing and subscribing events.
+
+The microservices interact through topics created with one of three routing types: `Wide`, `Explicit` and `PatternMatching`. 
+
+Each topic may have multiple rooms and, according to the routing type, microservices exchange messages on a different way.
+
+#### Wide topic
+
+Each message published on a wide topic is received by each room connected to it.
 
 ```ruby
 # Send a message
@@ -23,8 +41,10 @@ room.subscribe { |properties, payload|
 
 ```
 
-#### Explicit room topics
+#### Explicit topic
 
+For this kind of topic a message is published on an specific room using its exact name.
+ 
 ```ruby
 # Send a message
 
@@ -42,7 +62,9 @@ room.subscribe { |properties, payload|
 
 ```
 
-#### Pattern matching room topics
+#### Pattern matching topic
+
+Using a pattern matching routing, a microservice subscribe to a room based on matching between a message routing key and the pattern that was used to create that room.
 
 ```ruby
 # Send a message

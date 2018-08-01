@@ -10,7 +10,11 @@
   "dependencies": {
     "socket.io": "2.1.1",
     "amqplib": "0.5.2",
-    "pubsub-js": "1.6.0"
+    "pubsub-js": "1.6.0",
+    "body-parser": "~1.17.1",
+    "cookie-parser": "^1.4.3",
+    "express": "~4.15.2",
+    "shortid": "^2.2.8"
   },
   "devDependencies": {}
 }
