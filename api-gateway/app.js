@@ -1,10 +1,12 @@
-var express = require('express');
-var path = require('path');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
 
-var order = require('./routes/order/index');
+const printExecutionTime = require("../js/lib/printExecutionTime");
 
-var app = express();
+const order = require('./routes/order/index');
+
+const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -40,6 +42,8 @@ app.use(function (err, req, res, next) {
     message: err.message
   });
 });
+
+printExecutionTime();
 
 app.listen(3000);
 

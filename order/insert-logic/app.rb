@@ -1,5 +1,7 @@
 require 'json'
 
+require_relative "../../ruby/lib/printExecutionTime"
+
 require_relative '../../ruby/lib/MessageBroker/MessageBroker'
 require_relative '../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
 require_relative '../../ruby/lib/MessageBroker/Routing'
@@ -12,6 +14,8 @@ begin
 rescue MessageBrokerConnectionRefused
   abort "RabbitMQ connection refused"
 end  
+
+printExecutionTime
 
 topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
 onPlaceOrder = topic.createRoom(name: "place")

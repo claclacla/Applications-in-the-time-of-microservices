@@ -1,21 +1,22 @@
 require 'json'
-require 'sinatra'
 
-set :bind, '0.0.0.0'
+require_relative "../../ruby/lib/printExecutionTime"
 
 # TODO: This endpoint may have a response with a 201 status
 # TODO: Complete the definition of the response object
 
-post '/email' do
+printExecutionTime
 
-  # TODO: Add a message verification
+# post '/email' do
 
-  message = JSON.parse request.body.read
+#   # TODO: Add a message verification
 
-  # Dispatcher manager operations
+#   message = JSON.parse request.body.read
 
-  # ...
+#   # Dispatcher manager operations
 
-  content_type :json
-  { :code => 'D9r8Gu39r8B2G3ur' }.to_json
-end
+#   # ...
+
+#   content_type :json
+#   { :code => 'D9r8Gu39r8B2G3ur' }.to_json
+# end

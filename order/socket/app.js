@@ -1,6 +1,8 @@
 const server = require('http').createServer();
 const PubSub = require("pubsub-js");
 
+const printExecutionTime = require("../../js/lib/printExecutionTime");
+
 const RabbitMQDispatcher = require("../../js/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher");
 const MessageBroker = require("../../js/lib/MessageBroker/MessageBroker");
 const Routing = require("../../js/lib/MessageBroker/Routing");
@@ -14,6 +16,8 @@ const Routing = require("../../js/lib/MessageBroker/Routing");
   } catch (error) {
     return;
   }
+
+  printExecutionTime();
 
   let topic = messageBroker.createTopic({ name: "message", routing: Routing.Explicit });
   let emailSent = await topic.createRoom({ name: "email.sent" });
@@ -59,7 +63,7 @@ const Routing = require("../../js/lib/MessageBroker/Routing");
     // });
   });
 
-  socket.on('disconnect', function () {
+  //socket.on('disconnect', function () {
     //io.emit('user disconnected');
-  });
+  //});
 })();
