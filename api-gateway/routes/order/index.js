@@ -41,14 +41,16 @@ console.log("start");
 router
   .post('/', function (req, res, next) {
     let orderDto = req.body;
+    console.log("body", orderDto);
 
     PubSub.publish("on.place", orderDto);
 
     PubSub.subscribe("on.placed", (msg, payload) => {
       PubSub.unsubscribe("on.placed");
+      console.log(payload);
 
       res.status(201).send({
-        data: orderDto
+        data: payload
       });
     });
   });

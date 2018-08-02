@@ -19,6 +19,8 @@ puts "start"
 orderTopic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
 onOrderPlaced = orderTopic.createRoom(name: "on.placed")
 
+messageTopic = messageBroker.createTopic(name: "message", routing: Routing.Explicit)
+
 onOrderPlaced.subscribe { |delivery_info, properties, payload|
   puts "on placed"
   puts " [x] Received #{payload}"
@@ -53,14 +55,14 @@ onOrderPlaced.subscribe { |delivery_info, properties, payload|
 #
 #  # TODO: Create a DTO for this object
 #
-#  emailSentData = {
-#    "order" => {
-#      "number" => order["number"]
-#    },
-#    "receipt" => {
-#      "code" => dispatcherManagerReceipt["code"]
-#    }
-#  }
-#
-#  orderTopic.publish(room: "on.email.sent", payload: emailSentData.to_json)
+  emailSentData = {
+    "order" => {
+      "number" => order["number"]
+    },
+    "receipt" => {
+      "code" => dispatcherManagerReceipt["code"]
+    }
+  }
+ 
+  messageTopic.publish(room: "on.email.sent", payload: emailSentData.to_json)
 }

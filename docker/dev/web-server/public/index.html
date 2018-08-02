@@ -10,26 +10,29 @@
       $("#insertOrder").mousedown(() => {
         let order = {
           "user": {
-            "name": "Simone", 
-            "email": "info@claclacla.com", 
+            "name": "Simone",
+            "email": "info@claclacla.com",
             "mobile": "321987654"
           }
         };
 
-        $.post({
-          url: "http://localhost:3000",
-          data: order,
-          success: () => {
-            $('#messages').append($('<li>').text("Order placed!"));
+        fetch("http://localhost:3000/order", {
+          method: 'POST', 
+          body: JSON.stringify(order), 
+          headers: {
+            'Content-Type': 'application/json',
+            credentials: 'include'
           }
-        });
+        }).then(res => res.json())
+          .catch(error => console.error('Error:', error))
+          .then(response => console.log('Success:', response));
 
-        socket.emit("set.order.number", { number });
+        //socket.emit("set.order.number", { number });
       });
 
-      socket.on('message.dispatched', function (payload) {
-        $('#messages').append($('<li>').text(payload.message));
-      });
+      // socket.on('message.dispatched', function (payload) {
+      //   $('#messages').append($('<li>').text(payload.message));
+      // });
     });
   </script>
 </head>

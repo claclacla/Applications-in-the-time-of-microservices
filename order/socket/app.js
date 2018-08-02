@@ -44,27 +44,20 @@ const Routing = require("../../js/lib/MessageBroker/Routing");
   io.on('connection', function (socket) {
     let orderNumber = null;
 
-    socket.on('set.order.number', function (payload) {
+    // PubSub.subscribe("on.email.sent", (msg, data) => {
+    //   console.log(orderNumber, data);
 
-      // TODO: Add number verification
+    //   if (data.order.number !== orderNumber) {
+    //     return;
+    //   }
 
-      orderNumber = parseInt(payload.number);
+    //   console.log("emit to: " + orderNumber);
 
-      PubSub.subscribe("on.email.sent", (msg, data) => {
-        console.log(orderNumber, data);
+    //   socket.emit('message.dispatched', { message: "A new email for the order N." + orderNumber });
+    // });
+  });
 
-        if (data.order.number !== orderNumber) {
-          return;
-        }
-
-        console.log("emit to: " + orderNumber);
-
-        socket.emit('message.dispatched', { message: "A new email for the order N." + orderNumber });
-      });
-    });
-
-    socket.on('disconnect', function () {
-      //io.emit('user disconnected');
-    });
+  socket.on('disconnect', function () {
+    //io.emit('user disconnected');
   });
 })();
