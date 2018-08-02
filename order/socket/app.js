@@ -11,20 +11,18 @@ const Routing = require("../../js/lib/MessageBroker/Routing");
 
   try {
     await messageBroker.connect();
-    console.log("Connection created");
   } catch (error) {
-    console.log(error);
     return;
   }
 
-  let topic = messageBroker.createTopic({ name: "order", routing: Routing.Explicit });
-  let room = await topic.createRoom({ name: "on.email.sent" });
+  let topic = messageBroker.createTopic({ name: "message", routing: Routing.Explicit });
+  let emailSent = await topic.createRoom({ name: "email.sent" });
 
-  room.subscribe((msg) => {
+  emailSent.subscribe((msg) => {
     let content = msg.content;
     console.log(" [x] %s", content.toString());
 
-    PubSub.publish("on.email.sent", JSON.parse(content));
+    PubSub.publish("email.sent", JSON.parse(content));
   });
 
   // Start Socket.io server
@@ -48,7 +46,7 @@ const Routing = require("../../js/lib/MessageBroker/Routing");
 
     //});
 
-    // PubSub.subscribe("on.email.sent", (msg, data) => {
+    // PubSub.subscribe("email.sent", (msg, data) => {
     //   console.log(orderNumber, data);
 
     //   if (data.order.number !== orderNumber) {

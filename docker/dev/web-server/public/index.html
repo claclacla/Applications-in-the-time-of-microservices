@@ -17,17 +17,19 @@
         };
 
         fetch("http://localhost:3000/order", {
-          method: 'POST', 
-          body: JSON.stringify(order), 
+          method: 'POST',
+          body: JSON.stringify(order),
           headers: {
             'Content-Type': 'application/json',
             credentials: 'include'
           }
         }).then(res => res.json())
           .catch(error => console.error('Error:', error))
-          .then(response => console.log('Success:', response));
+          .then(response => {
+            let order = response.data.order;
 
-        //socket.emit("set.order.number", { number });
+            //socket.emit("order.dispatch", { number: order.number });
+          });
       });
 
       // socket.on('message.dispatched', function (payload) {

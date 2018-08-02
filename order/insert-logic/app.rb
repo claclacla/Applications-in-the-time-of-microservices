@@ -14,7 +14,7 @@ rescue MessageBrokerConnectionRefused
 end  
 
 topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
-onPlaceOrder = topic.createRoom(name: "on.place")
+onPlaceOrder = topic.createRoom(name: "place")
 
 orderNumber = 1
 
@@ -33,5 +33,5 @@ onPlaceOrder.subscribe { |delivery_info, properties, payload|
   # ...
 
   puts "Order placed"
-  topic.publish(room: "on.placed", payload: order.to_json)
+  topic.publish(room: "placed", payload: order.to_json)
 }

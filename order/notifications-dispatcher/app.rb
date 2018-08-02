@@ -14,15 +14,12 @@ rescue MessageBrokerConnectionRefused
   abort "RabbitMQ connection refused"
 end 
 
-puts "start"
-
 orderTopic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
-onOrderPlaced = orderTopic.createRoom(name: "on.placed")
+onOrderPlaced = orderTopic.createRoom(name: "placed")
 
 messageTopic = messageBroker.createTopic(name: "message", routing: Routing.Explicit)
 
 onOrderPlaced.subscribe { |delivery_info, properties, payload|
-  puts "on placed"
   puts " [x] Received #{payload}"
 
 #  order = JSON.parse payload
@@ -64,5 +61,5 @@ onOrderPlaced.subscribe { |delivery_info, properties, payload|
     }
   }
  
-  messageTopic.publish(room: "on.email.sent", payload: emailSentData.to_json)
+  messageTopic.publish(room: "email.sent", payload: emailSentData.to_json)
 }

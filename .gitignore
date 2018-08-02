@@ -1,6 +1,7 @@
 etc
 node_modules
 package-lock.json
+src
 
 # Logs
 logs
