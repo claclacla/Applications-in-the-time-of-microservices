@@ -118,8 +118,11 @@ echo "APP_FOLDER=/path-to-your-local/app" > .env
 # Run the micro services using docker compose
 sudo docker-compose up -d
 
-# Verify the microservices environment placing a new order
-curl -X POST localhost:3000/order -d '{"user":{"name":"Simone","email":"info@claclacla.com","mobile":"321987654"}}' --header "Content-Type: application/json"
+# Open your browser and type the following address
+http://localhost:8080
+
+# Verify the microservices environment placing a new order 
+# using the button "Insert order"
 
 ```
 
@@ -131,6 +134,9 @@ Port: 3000
 
 # Order Socket
 Port: 3001
+
+# Web server
+Port: 8080
 
 ```
 

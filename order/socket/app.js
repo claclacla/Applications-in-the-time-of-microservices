@@ -44,6 +44,10 @@ const Routing = require("../../js/lib/MessageBroker/Routing");
   io.on('connection', function (socket) {
     let orderNumber = null;
 
+    //socket.on("", function(payload) {
+
+    //});
+
     // PubSub.subscribe("on.email.sent", (msg, data) => {
     //   console.log(orderNumber, data);
 
