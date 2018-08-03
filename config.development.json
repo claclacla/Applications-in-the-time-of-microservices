@@ -1,0 +1,12 @@
+{
+  "mongodb": {
+    "host": "mongodb",
+    "user": "",
+    "password": "",
+    "database": "ecommerce",
+    "port": "27017"
+  },
+  "rabbitmq": {
+    "host": "rabbitmq"
+  }
+}
