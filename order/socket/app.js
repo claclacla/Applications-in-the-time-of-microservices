@@ -20,7 +20,7 @@ const Routing = require("../../js/lib/MessageBroker/Routing");
   printExecutionTime();
 
   let orderTopic = messageBroker.createTopic({ name: "order", routing: Routing.Explicit });
-  let orderUpdated = await orderTopic.createRoom({ name: "order.updated" });
+  let orderUpdated = await orderTopic.createRoom({ name: "updated" });
 
   orderUpdated.subscribe((msg) => {
     let content = msg.content;

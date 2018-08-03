@@ -140,6 +140,18 @@ Port: 8080
 
 ```
 
+#### MessageBroker topics
+
+Order
+
+* place
+* placed
+* updated
+
+Message
+
+* email.sent
+
 --------------------------------------------------------------------------------
 
 ## Authors
