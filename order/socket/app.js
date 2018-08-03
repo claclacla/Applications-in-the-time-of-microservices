@@ -45,10 +45,29 @@ const Routing = require("../../js/lib/MessageBroker/Routing");
 
   io.on('connection', function (socket) {
     let orderNumber = null;
+    let emailSentEvent = null;
 
-    //socket.on("", function(payload) {
+    socket.on("order.subscribe.events", function (payload) {
+      console.log("order.subscribe.events", payload);
 
-    //});
+      orderNumber = payload.number;
+    });
+
+    emailSentEvent = PubSub.subscribe("email.sent", function (msg, message) {
+      console.log("email.sent", message.order.number, orderNumber);
+
+      if (message.order.number !== orderNumber) {
+        return;
+      }
+
+      socket.emit('email.sent', { message: "Email sent!" });
+    });
+
+    socket.on('disconnect', function () {
+      PubSub.unsubscribe(emailSentEvent);
+    });
+
+    // let orderNumber = null;
 
     // PubSub.subscribe("email.sent", (msg, data) => {
     //   console.log(orderNumber, data);
@@ -62,8 +81,4 @@ const Routing = require("../../js/lib/MessageBroker/Routing");
     //   socket.emit('message.dispatched', { message: "A new email for the order N." + orderNumber });
     // });
   });
-
-  //socket.on('disconnect', function () {
-    //io.emit('user disconnected');
-  //});
 })();

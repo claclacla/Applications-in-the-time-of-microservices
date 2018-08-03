@@ -26,7 +26,7 @@ messageTopic = messageBroker.createTopic(name: "message", routing: Routing.Expli
 onOrderPlaced.subscribe { |delivery_info, properties, payload|
   puts " [x] Received #{payload}"
 
-#  order = JSON.parse payload
+  order = JSON.parse payload
 #
 #  # TODO: Create a DTO for this object
 #
@@ -61,7 +61,7 @@ onOrderPlaced.subscribe { |delivery_info, properties, payload|
       "number" => order["number"]
     },
     "receipt" => {
-      "code" => dispatcherManagerReceipt["code"]
+      "code" => "oij45tkj8d4G-Wed5" #dispatcherManagerReceipt["code"]
     }
   }
  

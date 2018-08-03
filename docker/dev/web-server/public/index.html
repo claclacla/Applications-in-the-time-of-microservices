@@ -4,6 +4,16 @@
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/socket.io.js"></script>
   <script>
+    function showOrderData(order) {
+      $("#orderData").css({"display": "block"});
+
+      $('#orderNumber').text(order.number);
+
+      $('#userName').text(order.user.name);
+      $('#userEmail').text(order.user.email);
+      $('#userMobile').text(order.user.mobile);
+    }
+
     $(function () {
       let socket = io("http://localhost:3001", { path: "/order" });
 
@@ -27,14 +37,18 @@
           .catch(error => console.error('Error:', error))
           .then(response => {
             let order = response.data.order;
+            showOrderData(order);
 
-            //socket.emit("order.dispatch", { number: order.number });
+/*
+            socket.emit("order.events.subscribe", { number: order.number });
+
+            socket.on('order.updated', function (payload) {
+              let order = payload.message;
+              showOrderData(order);
+            });
+*/            
           });
       });
-
-      // socket.on('message.dispatched', function (payload) {
-      //   $('#messages').append($('<li>').text(payload.message));
-      // });
     });
   </script>
 </head>
@@ -43,8 +57,14 @@
   <input type="button" value="Insert order" id="insertOrder" />
   <br />
   <br />
-  <ul id="messages">
-  </ul>
+  <div id="orderData" style="display: none;">
+    <div><b>Number:</b> <span id="orderNumber"></span></div>
+    <br />
+    <div><b>User</b></div>
+    <div>Name: <span id="userName"></span></div>
+    <div>Email: <span id="userEmail"></span></div>
+    <div>Mobile: <span id="userMobile"></span></div>
+  </div>
 </body>
 
 </html>
