@@ -25,20 +25,24 @@ services:
       - 3000:3000
     volumes:
       - "${APP_FOLDER}:/usr/src/app"
+    links:
+      - rabbitmq
     tty: true
     stdin_open: true
 
-  order-insert-logic:
+  order-insert:
     build: ./ruby-microservice
     image: claclacla/ruby-microservice
-    container_name: OrderInsertLogic
+    container_name: OrderInsert
     environment:
-      - MICROSERVICE_PATH=/usr/src/app/order/insert-logic/app.rb  
+      - MICROSERVICE_PATH=/usr/src/app/order/insert/app.rb  
       - APP_ENV=development
     networks:
       - rabbitmq_network
     volumes:
       - "${APP_FOLDER}:/usr/src/app"
+    links:
+      - rabbitmq
     tty: true
     stdin_open: true
 
@@ -53,6 +57,8 @@ services:
       - rabbitmq_network
     volumes:
       - "${APP_FOLDER}:/usr/src/app"
+    links:
+      - rabbitmq
     tty: true
     stdin_open: true
 
@@ -67,6 +73,8 @@ services:
       - rabbitmq_network
     volumes:
       - "${APP_FOLDER}:/usr/src/app"
+    links:
+      - rabbitmq
     tty: true
     stdin_open: true
 
@@ -92,5 +100,7 @@ services:
       - 3001:3001
     volumes:
       - "${APP_FOLDER}:/usr/src/app"
+    links:
+      - rabbitmq
     tty: true
     stdin_open: true
