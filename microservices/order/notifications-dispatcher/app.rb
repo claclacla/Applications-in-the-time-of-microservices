@@ -1,12 +1,12 @@
 require 'json'
 require 'net/http'
 
-require_relative "../../ruby/lib/printExecutionTime"
-require_relative "../../ruby/lib/config"
+require_relative "../../../ruby/lib/printExecutionTime"
+require_relative "../../../ruby/lib/config"
 
-require_relative '../../ruby/lib/MessageBroker/MessageBroker'
-require_relative '../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
-require_relative '../../ruby/lib/MessageBroker/Routing'
+require_relative '../../../ruby/lib/MessageBroker/MessageBroker'
+require_relative '../../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
+require_relative '../../../ruby/lib/MessageBroker/Routing'
 
 dispatcher = RabbitMQDispatcher.new(host: config["rabbitmq"]["host"])
 messageBroker = MessageBroker.new(dispatcher: dispatcher)

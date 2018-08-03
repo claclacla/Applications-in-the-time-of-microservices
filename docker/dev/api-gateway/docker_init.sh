@@ -10,4 +10,4 @@ echo "
 Start app...
 "
 
-pm2-docker start /usr/src/app/api-gateway/app.js
+pm2-docker start /usr/src/app/microservices/api-gateway/app.js

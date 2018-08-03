@@ -1,11 +1,11 @@
 const server = require('http').createServer();
 const PubSub = require("pubsub-js");
 
-const printExecutionTime = require("../../js/lib/printExecutionTime");
+const printExecutionTime = require("../../../js/lib/printExecutionTime");
 
-const RabbitMQDispatcher = require("../../js/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher");
-const MessageBroker = require("../../js/lib/MessageBroker/MessageBroker");
-const Routing = require("../../js/lib/MessageBroker/Routing");
+const RabbitMQDispatcher = require("../../../js/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher");
+const MessageBroker = require("../../../js/lib/MessageBroker/MessageBroker");
+const Routing = require("../../../js/lib/MessageBroker/Routing");
 
 (async () => {
   const rabbitMQDispatcher = new RabbitMQDispatcher({ host: 'amqp://rabbitmq' });

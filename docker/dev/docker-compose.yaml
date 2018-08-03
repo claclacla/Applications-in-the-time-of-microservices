@@ -3,6 +3,8 @@ version: '3'
 networks:
   rabbitmq_network:
     driver: bridge
+  mongodb_network:
+    driver: bridge  
 
 services:
   rabbitmq:
@@ -12,6 +14,12 @@ services:
       - rabbitmq_network
     ports:
       - "5672:5672"
+
+  mongodb:
+    image: mongo:3.4
+    container_name: MongoDB
+    networks:
+      - mongodb_network
 
   api-gateway:
     build: ./api-gateway
@@ -35,14 +43,16 @@ services:
     image: claclacla/ruby-microservice
     container_name: OrderInsert
     environment:
-      - MICROSERVICE_PATH=/usr/src/app/order/insert/app.rb  
+      - MICROSERVICE_PATH=/usr/src/app/microservices/order/insert/app.rb  
       - APP_ENV=development
     networks:
       - rabbitmq_network
+      - mongodb_network
     volumes:
       - "${APP_FOLDER}:/usr/src/app"
     links:
       - rabbitmq
+      - mongodb
     tty: true
     stdin_open: true
 
@@ -51,7 +61,7 @@ services:
     image: claclacla/ruby-microservice
     container_name: OrderNotificationsDispatcher
     environment:
-      - MICROSERVICE_PATH=/usr/src/app/order/notifications-dispatcher/app.rb  
+      - MICROSERVICE_PATH=/usr/src/app/microservices/order/notifications-dispatcher/app.rb  
       - APP_ENV=development
     networks:
       - rabbitmq_network
@@ -67,7 +77,7 @@ services:
     image: claclacla/ruby-microservice-api
     container_name: DispatcherManager
     environment:
-      - MICROSERVICE_PATH=/usr/src/app/dispatcher/manager/app.rb
+      - MICROSERVICE_PATH=/usr/src/app/microservices/dispatcher/manager/app.rb
       - APP_ENV=development
     networks:
       - rabbitmq_network
@@ -92,7 +102,7 @@ services:
     image: claclacla/js-microservice
     container_name: OrderSocket
     environment:
-      - MICROSERVICE_PATH=/usr/src/app/order/socket/app.js
+      - MICROSERVICE_PATH=/usr/src/app/microservices/order/socket/app.js
       - APP_ENV=development
     networks:
       - rabbitmq_network

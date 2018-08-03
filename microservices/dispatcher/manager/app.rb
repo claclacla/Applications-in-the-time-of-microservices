@@ -1,7 +1,7 @@
 require 'json'
 
-require_relative "../../ruby/lib/printExecutionTime"
-require_relative "../../ruby/lib/config"
+require_relative "../../../ruby/lib/printExecutionTime"
+require_relative "../../../ruby/lib/config"
 
 # TODO: This endpoint may have a response with a 201 status
 # TODO: Complete the definition of the response object

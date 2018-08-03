@@ -4,9 +4,9 @@ const router = express.Router();
 
 //const HttpError = require("../../errors/HttpError");
 
-const RabbitMQDispatcher = require("../../../js/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher");
-const MessageBroker = require("../../../js/lib/MessageBroker/MessageBroker");
-const Routing = require("../../../js/lib/MessageBroker/Routing");
+const RabbitMQDispatcher = require("../../../../js/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher");
+const MessageBroker = require("../../../../js/lib/MessageBroker/MessageBroker");
+const Routing = require("../../../../js/lib/MessageBroker/Routing");
 
 (async () => {
   const rabbitMQDispatcher = new RabbitMQDispatcher({ host: 'amqp://rabbitmq' });

@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 
-const printExecutionTime = require("../js/lib/printExecutionTime");
+const printExecutionTime = require("../../js/lib/printExecutionTime");
 
 const order = require('./routes/order/index');
 
