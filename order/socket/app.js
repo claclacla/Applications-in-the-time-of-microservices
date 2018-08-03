@@ -19,14 +19,14 @@ const Routing = require("../../js/lib/MessageBroker/Routing");
 
   printExecutionTime();
 
-  let topic = messageBroker.createTopic({ name: "message", routing: Routing.Explicit });
-  let emailSent = await topic.createRoom({ name: "email.sent" });
+  let orderTopic = messageBroker.createTopic({ name: "order", routing: Routing.Explicit });
+  let orderUpdated = await orderTopic.createRoom({ name: "order.updated" });
 
-  emailSent.subscribe((msg) => {
+  orderUpdated.subscribe((msg) => {
     let content = msg.content;
     console.log(" [x] %s", content.toString());
 
-    PubSub.publish("email.sent", JSON.parse(content));
+    PubSub.publish("order.updated", JSON.parse(content));
   });
 
   // Start Socket.io server
@@ -47,38 +47,24 @@ const Routing = require("../../js/lib/MessageBroker/Routing");
     let orderNumber = null;
     let emailSentEvent = null;
 
-    socket.on("order.subscribe.events", function (payload) {
-      console.log("order.subscribe.events", payload);
+    socket.on("order.events.subscribe", function (payload) {
+      console.log("order.events.subscribe", payload);
 
       orderNumber = payload.number;
     });
 
-    emailSentEvent = PubSub.subscribe("email.sent", function (msg, message) {
-      console.log("email.sent", message.order.number, orderNumber);
+    emailSentEvent = PubSub.subscribe("order.updated", function (msg, message) {
+      console.log("order.updated", message.order.number, orderNumber);
 
       if (message.order.number !== orderNumber) {
         return;
       }
 
-      socket.emit('email.sent', { message: "Email sent!" });
+      socket.emit('order.updated', { message: order });
     });
 
     socket.on('disconnect', function () {
       PubSub.unsubscribe(emailSentEvent);
     });
-
-    // let orderNumber = null;
-
-    // PubSub.subscribe("email.sent", (msg, data) => {
-    //   console.log(orderNumber, data);
-
-    //   if (data.order.number !== orderNumber) {
-    //     return;
-    //   }
-
-    //   console.log("emit to: " + orderNumber);
-
-    //   socket.emit('message.dispatched', { message: "A new email for the order N." + orderNumber });
-    // });
   });
 })();
