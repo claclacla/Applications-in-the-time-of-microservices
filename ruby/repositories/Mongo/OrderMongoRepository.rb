@@ -134,10 +134,27 @@ class OrderMongoRepository
 =end
   end
 
+  def mapGetFilters filters:
+    getFilters = []
+
+    if filters["skip"]
+      getFilters.push({"$skip" => filters["skip"]})
+    end
+
+    if filters["limit"]
+      getFilters.push({"$limit" => filters["limit"]})
+    end
+
+    if filters["sort"]
+      getFilters.push({"$sort" => filters["sort"]})
+    end
+
+    getFilters
+  end
+
   # TODO: Add filters(skip, limit, sort)
 
-  def get match: nil 
-=begin
+  def get match: nil, filters: nil
     resOrderEntities = []
     query = []
 
@@ -147,37 +164,35 @@ class OrderMongoRepository
 
     query.push({"$project" => {
       "uid" => 1,
-      "season" => 1, 
-      "code" => 1, 
-      "col_style_fabric_string" => 1, 
-      "code29" => 1, 
-      "user_zona" => 1,
-      "warehouse" => 1,
-      "amount" => 1,
-      "sockets" => 1
+      "number" => 1,
+      "user" => 1
     }})
 
+    if !filters.nil?
+      getFilters = mapGetFilters(filters: filters)
+
+      if !getFilters.empty?
+        query.concat(getFilters)
+      end
+    end
+
     @mongo[:order].aggregate(query).each do |resOrder|
+      resOrderUserEntity = OrderUserEntity.new(
+        name: resOrder["user"]["name"],
+        email: resOrder["user"]["email"],
+        mobile: resOrder["user"]["mobile"]
+      )
+  
       resOrderEntity = OrderEntity.new(
         uid: resOrder["uid"],
-        season: resOrder["season"],
-        code: resOrder["code"],
-        col_style_fabric_string: resOrder["col_style_fabric_string"],
-        user_zona: resOrder["user_zona"],
-        warehouse: resOrder["warehouse"],
-        amount: resOrder["amount"],
-        sockets: resOrder["sockets"]
+        number: resOrder["number"],
+        user: resOrderUserEntity
       )
-
-      if !resOrder["code29"].nil?
-        resOrderEntity.code29 = resOrder["code29"]
-      end
   
       resOrderEntities.push resOrderEntity
     end
 
     return resOrderEntities
-=end
   end
 
   def remove filter:

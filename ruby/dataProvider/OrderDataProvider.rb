@@ -11,7 +11,15 @@ class OrderDataProvider < BaseDataProvider
   def place orderUserEntity:
     orderNumber = 1
 
-    # TODO: Get max order number
+    resOrderEntities = @repository.get(filters: {
+      "sort" => {"number" => -1},
+      "limit" => 1
+    })
+
+    if !resOrderEntities.empty?
+      resOrderEntity = resOrderEntities[0]
+      orderNumber = resOrderEntity.number + 1
+    end
 
     orderEntity = OrderEntity.new(number: orderNumber, user: orderUserEntity)
 
