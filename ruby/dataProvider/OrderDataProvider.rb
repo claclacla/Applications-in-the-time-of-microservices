@@ -6,7 +6,13 @@ class OrderDataProvider < BaseDataProvider
     super(repository: repository)
   end
 
-  # TODO: verify the orderUSer type
+  # TODO: Add match and filters
+
+  def get
+    @repository.get()
+  end
+
+  # TODO: verify the orderUser type
 
   def place orderUserEntity:
     orderNumber = 1
@@ -15,7 +21,6 @@ class OrderDataProvider < BaseDataProvider
       "sort" => {"number" => -1},
       "limit" => 1
     })
-    puts resOrderEntities.length
 
     if !resOrderEntities.empty?
       resOrderEntity = resOrderEntities[0]

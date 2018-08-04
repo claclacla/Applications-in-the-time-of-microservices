@@ -133,11 +133,14 @@ http://localhost:8080
 # Order API
 Port: 3000
 
-# Order Socket
+# Client order Socket
 Port: 3001
 
 # Client application
 Port: 8080
+
+# Vendor order Socket
+Port: 3002
 
 # Vendor application
 Port: 8081

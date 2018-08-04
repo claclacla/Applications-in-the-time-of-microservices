@@ -7,6 +7,9 @@ networks:
     driver: bridge  
 
 services:
+
+  # Servers
+
   rabbitmq:
     image: rabbitmq:3.7.4
     container_name: RabbitMQ
@@ -20,6 +23,8 @@ services:
     container_name: MongoDB
     networks:
       - mongodb_network
+
+  # Api gateway
 
   api-gateway:
     build: ./api-gateway
@@ -37,6 +42,8 @@ services:
       - rabbitmq
     tty: true
     stdin_open: true
+
+  # Order
 
   order-insert:
     build: ./ruby-microservice
@@ -72,6 +79,28 @@ services:
     tty: true
     stdin_open: true
 
+  # Orders
+
+  orders-get:
+    build: ./ruby-microservice
+    image: claclacla/ruby-microservice
+    container_name: OrdersGet
+    environment:
+      - MICROSERVICE_PATH=/usr/src/app/microservices/orders/get/app.rb  
+      - APP_ENV=development
+    networks:
+      - rabbitmq_network
+      - mongodb_network
+    volumes:
+      - "${APP_FOLDER}:/usr/src/app"
+    links:
+      - rabbitmq
+      - mongodb
+    tty: true
+    stdin_open: true
+
+  # Dispatcher
+
   dispatcher-manager:
     build: ./ruby-microservice-api
     image: claclacla/ruby-microservice-api
@@ -87,6 +116,8 @@ services:
       - rabbitmq
     tty: true
     stdin_open: true
+
+  # Client
 
   client-application:
     build: ./client-application
@@ -115,6 +146,8 @@ services:
     tty: true
     stdin_open: true
 
+  # Vendor
+
   vendor-application:
     build: ./vendor-application
     image: claclacla/spa-http-server
@@ -123,3 +156,21 @@ services:
       - 8081:8080
     volumes:
       - "${APP_FOLDER}/docker/dev/vendor-application/public:/usr/src/app"
+
+  vendor-order-socket:
+    build: ./js-microservice
+    image: claclacla/js-microservice
+    container_name: VendorOrderSocket
+    environment:
+      - MICROSERVICE_PATH=/usr/src/app/microservices/order/vendor-socket/app.js
+      - APP_ENV=development
+    networks:
+      - rabbitmq_network
+    ports:
+      - 3002:3002
+    volumes:
+      - "${APP_FOLDER}:/usr/src/app"
+    links:
+      - rabbitmq
+    tty: true
+    stdin_open: true

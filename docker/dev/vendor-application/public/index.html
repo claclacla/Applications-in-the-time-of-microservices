@@ -2,31 +2,32 @@
 
 <head>
   <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/socket.io.js"></script>
   <script>
     $(function () {
-      $("#showOrder").mousedown(() => {
-        fetch("http://localhost:3000/order", {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            credentials: 'include'
-          }
-        }).then(res => res.json())
-          .catch(error => console.error('Error:', error))
-          .then(response => {
-            let orders = response.data.orders;
-            console.log(orders);
-                      
-          });
+      let socket = io("http://localhost:3002", { path: "/order/vendor-application" });
+
+      socket.on('orders.got', function (payload) {
+        console.log(payload);
+        
+        let orders = payload.data;
+        
+        $("#orders").html("");
+
+        orders.map(order => {
+          $("#orders").append("<li>" + order.number + "</li>");
+        });
       });
     });
   </script>
 </head>
 
 <body>
-  <input type="button" value="Show orders" id="showOrder" />
+  Orders
   <br />
   <br />
+  <ul id="orders">
+  </ul>
 </body>
 
 </html>

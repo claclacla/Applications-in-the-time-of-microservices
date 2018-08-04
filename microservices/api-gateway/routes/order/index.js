@@ -18,8 +18,6 @@ const Routing = require("../../../../js/lib/MessageBroker/Routing");
     return;
   }
 
-  // order.* events
-
   let orderTopic = messageBroker.createTopic({ name: "order", routing: Routing.Explicit });
   let onOrderPlaced = await orderTopic.createRoom({ name: "placed" });
 
@@ -32,35 +30,9 @@ const Routing = require("../../../../js/lib/MessageBroker/Routing");
 
     PubSub.publish("order.placed", JSON.parse(content));
   });
-
-  // orders.* events
-
-  let ordersTopic = messageBroker.createTopic({ name: "orders", routing: Routing.Explicit });
-  let onOrdersGot = await ordersTopic.createRoom({ name: "got" });
-
-  PubSub.subscribe("orders.get", (msg, payload) => {
-    ordersTopic.publish({ room: "get", payload: JSON.stringify(payload) });
-  });
-
-  onOrdersGot.subscribe((msg) => {
-    let content = msg.content;
-
-    PubSub.publish("orders.got", JSON.parse(content));
-  });
 })();
 
 router
-  .get('/', function (req, res, next) {
-    PubSub.publish("orders.get");
-
-    PubSub.subscribe("orders.got", (msg, orders) => {
-      PubSub.unsubscribe("orders.got");
-
-      res.status(200).send({
-        data: orders
-      });
-    });
-  })
   .post('/', function (req, res, next) {
     let orderDto = req.body;
 

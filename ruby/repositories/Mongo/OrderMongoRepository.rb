@@ -176,7 +176,6 @@ class OrderMongoRepository
       end
     end
 
-    puts query
     @mongo[:order].aggregate(query).each do |resOrder|
       resOrderUserEntity = OrderUserEntity.new(
         name: resOrder["user"]["name"],

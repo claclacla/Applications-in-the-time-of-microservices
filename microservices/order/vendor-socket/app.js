@@ -19,48 +19,45 @@ const Routing = require("../../../js/lib/MessageBroker/Routing");
 
   printExecutionTime();
 
-  let orderTopic = messageBroker.createTopic({ name: "order", routing: Routing.Explicit });
-  let orderUpdated = await orderTopic.createRoom({ name: "updated" });
+  // orders.* events
 
-  orderUpdated.subscribe((msg) => {
+  let ordersTopic = messageBroker.createTopic({ name: "orders", routing: Routing.Explicit });
+  let onOrdersGot = await ordersTopic.createRoom({ name: "got" });
+
+  onOrdersGot.subscribe((msg) => {
     let content = msg.content;
-    console.log(" [x] %s", content.toString());
 
-    PubSub.publish("order.updated", { order: JSON.parse(content) });
+    PubSub.publish("orders.got", { orders: JSON.parse(content) });
+  });
+
+  // order.* events
+
+  let orderTopic = messageBroker.createTopic({ name: "order", routing: Routing.Explicit });
+  let onOrderPlaced = await orderTopic.createRoom({ name: "placed" });
+
+  onOrderPlaced.subscribe((msg) => {
+    ordersTopic.publish({ room: "get", payload: "" });
   });
 
   // Start Socket.io server
 
   const io = require('socket.io')(server, {
-    path: '/order/client-application',
+    path: '/order/vendor-application',
     serveClient: false,
     pingInterval: 10000,
     pingTimeout: 5000,
     cookie: false
   });
 
-  server.listen(3001);
+  server.listen(3002);
 
   // Wait for connections
 
   io.on('connection', function (socket) {
-    let orderNumber = null;
-    let emailSentEvent = null;
+    emailSentEvent = PubSub.subscribe("orders.got", function (msg, message) {
+      let orders = message.orders;
 
-    socket.on("order.events.subscribe", function (payload) {
-      console.log("order.events.subscribe", payload);
-
-      orderNumber = payload.number;
-    });
-
-    emailSentEvent = PubSub.subscribe("order.updated", function (msg, message) {
-      console.log("order.updated", message.order.number, orderNumber);
-
-      if (message.order.number !== orderNumber) {
-        return;
-      }
-
-      socket.emit('order.updated', { data: order });
+      socket.emit('orders.got', { data: orders });
     });
 
     socket.on('disconnect', function () {
