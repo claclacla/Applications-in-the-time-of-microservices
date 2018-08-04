@@ -88,14 +88,14 @@ services:
     tty: true
     stdin_open: true
 
-  web-server:
-    build: ./web-server
+  client-application:
+    build: ./client-application
     image: claclacla/spa-http-server
-    container_name: WebServer
+    container_name: ClientApplication
     ports:
       - 8080:8080
     volumes:
-      - "${APP_FOLDER}/docker/dev/web-server/public:/usr/src/app"
+      - "${APP_FOLDER}/docker/dev/client-application/public:/usr/src/app"
 
   order-socket:
     build: ./js-microservice
