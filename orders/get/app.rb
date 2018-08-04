@@ -31,24 +31,16 @@ mongo = mongoConnect(
 
 printExecutionTime
 
-topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
-onPlaceOrder = topic.createRoom(name: "place")
+topic = messageBroker.createTopic(name: "orders", routing: Routing.Explicit)
+onGetOrders = topic.createRoom(name: "get")
 
 orderMongoRepository = OrderMongoRepository.new(mongo: mongo)
 orderDataProvider = OrderDataProvider.new(repository: orderMongoRepository)
 
-onPlaceOrder.subscribe { |delivery_info, properties, payload|
-  puts " [x] Received #{payload}"
+onGetOrders.subscribe { |delivery_info, properties, payload|
+  puts " [x] Received orders get request"
 
-  order = JSON.parse payload
+  resOrderEntities = orderDataProvider.get()
 
-  orderUserEntity = OrderUserEntity.new(
-    name: order["user"]["name"],
-    email: order["user"]["email"],
-    mobile: order["user"]["mobile"]
-  )
-
-  resOrderEntity = orderDataProvider.place(orderUserEntity: orderUserEntity)
-
-  topic.publish(room: "placed", payload: resOrderEntity.to_json)
+  topic.publish(room: "got", payload: resOrderEntities.to_json)
 }
