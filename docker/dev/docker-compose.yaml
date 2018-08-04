@@ -114,3 +114,12 @@ services:
       - rabbitmq
     tty: true
     stdin_open: true
+
+  vendor-application:
+    build: ./vendor-application
+    image: claclacla/spa-http-server
+    container_name: VendorApplication
+    ports:
+      - 8081:8080
+    volumes:
+      - "${APP_FOLDER}/docker/dev/vendor-application/public:/usr/src/app"

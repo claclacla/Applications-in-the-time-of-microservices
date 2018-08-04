@@ -119,6 +119,7 @@ echo "APP_FOLDER=/path-to-your-local/app" > .env
 sudo docker-compose up -d
 
 # Open your browser and type the following address
+# to connect to the client application
 http://localhost:8080
 
 # Verify the microservices environment placing a new order 
@@ -135,8 +136,11 @@ Port: 3000
 # Order Socket
 Port: 3001
 
-# Web server
+# Client application
 Port: 8080
+
+# Vendor application
+Port: 8081
 
 ```
 
