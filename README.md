@@ -168,4 +168,4 @@ This project is licensed under the MIT License
 
 ## Acknowledgments
 
-- [Docker](https://www.docker.com/)
+- [Ruby MongoDB driver](https://docs.mongodb.com/ruby-driver/master/ruby-driver-tutorials/)

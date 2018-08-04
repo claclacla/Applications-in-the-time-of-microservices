@@ -15,6 +15,7 @@ class OrderDataProvider < BaseDataProvider
       "sort" => {"number" => -1},
       "limit" => 1
     })
+    puts resOrderEntities.length
 
     if !resOrderEntities.empty?
       resOrderEntity = resOrderEntities[0]

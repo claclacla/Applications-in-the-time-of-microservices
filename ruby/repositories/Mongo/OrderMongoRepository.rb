@@ -137,16 +137,16 @@ class OrderMongoRepository
   def mapGetFilters filters:
     getFilters = []
 
+    if filters["sort"]
+      getFilters.push({"$sort" => filters["sort"]})
+    end
+
     if filters["skip"]
       getFilters.push({"$skip" => filters["skip"]})
     end
 
     if filters["limit"]
       getFilters.push({"$limit" => filters["limit"]})
-    end
-
-    if filters["sort"]
-      getFilters.push({"$sort" => filters["sort"]})
     end
 
     getFilters
@@ -176,6 +176,7 @@ class OrderMongoRepository
       end
     end
 
+    puts query
     @mongo[:order].aggregate(query).each do |resOrder|
       resOrderUserEntity = OrderUserEntity.new(
         name: resOrder["user"]["name"],
