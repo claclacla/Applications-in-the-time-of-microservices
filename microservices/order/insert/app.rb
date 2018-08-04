@@ -3,6 +3,11 @@ require 'json'
 require_relative "../../../ruby/lib/printExecutionTime"
 require_relative "../../../ruby/lib/config"
 
+require_relative "../../../ruby/repositories/Mongo/lib/connect"
+require_relative "../../../ruby/entities/OrderUserEntity"
+require_relative "../../../ruby/repositories/Mongo/OrderMongoRepository"
+require_relative "../../../ruby/dataProvider/OrderDataProvider"
+
 require_relative '../../../ruby/lib/MessageBroker/MessageBroker'
 require_relative '../../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
 require_relative '../../../ruby/lib/MessageBroker/Routing'
@@ -16,27 +21,35 @@ rescue MessageBrokerConnectionRefused
   abort "RabbitMQ connection refused"
 end  
 
+mongo = mongoConnect(
+  host: config["mongodb"]["host"], 
+  port: config["mongodb"]["port"], 
+  user: config["mongodb"]["username"], 
+  password: config["mongodb"]["password"], 
+  database: config["mongodb"]["database"]
+)
+
 printExecutionTime
 
 topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
 onPlaceOrder = topic.createRoom(name: "place")
 
-orderNumber = 1
+orderMongoRepository = OrderMongoRepository.new(mongo: mongo)
+orderDataProvider = OrderDataProvider.new(repository: orderMongoRepository)
 
 onPlaceOrder.subscribe { |delivery_info, properties, payload|
   puts " [x] Received #{payload}"
 
-  # Order insert logic operations
-
-  # ...
-
   order = JSON.parse payload
-  order["number"] = orderNumber
 
-  orderNumber += 1
+  orderUserEntity = OrderUserEntity.new(
+    name: order["user"]["name"],
+    email: order["user"]["email"],
+    mobile: order["user"]["mobile"]
+  )
 
-  # ...
+  resOrderEntity = orderDataProvider.place(orderUserEntity: orderUserEntity)
 
   puts "Order placed"
-  topic.publish(room: "placed", payload: order.to_json)
+  topic.publish(room: "placed", payload: resOrderEntity.to_json)
 }
