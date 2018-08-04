@@ -15,7 +15,7 @@
     }
 
     $(function () {
-      let socket = io("http://localhost:3001", { path: "/order" });
+      let socket = io("http://localhost:3001", { path: "/order/client-application" });
 
       $("#insertOrder").mousedown(() => {
         let order = {
@@ -36,7 +36,7 @@
         }).then(res => res.json())
           .catch(error => console.error('Error:', error))
           .then(response => {
-            let order = response.data.order;
+            let order = response.data;
             showOrderData(order);
 
 /*

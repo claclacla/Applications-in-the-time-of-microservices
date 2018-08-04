@@ -32,7 +32,7 @@ const Routing = require("../../../js/lib/MessageBroker/Routing");
   // Start Socket.io server
 
   const io = require('socket.io')(server, {
-    path: '/order',
+    path: '/order/client-application',
     serveClient: false,
     pingInterval: 10000,
     pingTimeout: 5000,

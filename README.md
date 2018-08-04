@@ -152,6 +152,11 @@ Order
 * placed
 * updated
 
+Orders
+
+* get
+* got
+
 Message
 
 * email.sent
