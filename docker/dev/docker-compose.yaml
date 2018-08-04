@@ -97,12 +97,12 @@ services:
     volumes:
       - "${APP_FOLDER}/docker/dev/client-application/public:/usr/src/app"
 
-  order-socket:
+  client-order-socket:
     build: ./js-microservice
     image: claclacla/js-microservice
-    container_name: OrderSocket
+    container_name: ClientOrderSocket
     environment:
-      - MICROSERVICE_PATH=/usr/src/app/microservices/order/socket/app.js
+      - MICROSERVICE_PATH=/usr/src/app/microservices/order/client-socket/app.js
       - APP_ENV=development
     networks:
       - rabbitmq_network
