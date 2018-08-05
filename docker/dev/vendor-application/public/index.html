@@ -7,16 +7,10 @@
     $(function () {
       let socket = io("http://localhost:3002", { path: "/order/vendor-application" });
 
-      socket.on('orders.got', function (payload) {
+      socket.on('order.placed', function (payload) {
         console.log(payload);
         
-        let orders = payload.data;
-        
-        $("#orders").html("");
-
-        orders.map(order => {
-          $("#orders").append("<li>" + order.number + "</li>");
-        });
+        let uid = payload.data;
       });
     });
   </script>

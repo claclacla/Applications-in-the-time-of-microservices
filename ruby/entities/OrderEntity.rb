@@ -14,6 +14,7 @@ class OrderEntity < BaseEntity
 
   def as_json(options={})
     {
+      :uid => @uid,
       :number => @number,
       :user => @user
     }

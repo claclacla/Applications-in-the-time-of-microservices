@@ -21,14 +21,14 @@ const Routing = require("../../../js/lib/MessageBroker/Routing");
 
   // orders.* events
 
-  let ordersTopic = messageBroker.createTopic({ name: "orders", routing: Routing.Explicit });
-  let onOrdersGot = await ordersTopic.createRoom({ name: "got" });
+  // let ordersTopic = messageBroker.createTopic({ name: "orders", routing: Routing.Explicit });
+  // let onOrdersGot = await ordersTopic.createRoom({ name: "got" });
 
-  onOrdersGot.subscribe((msg) => {
-    let content = msg.content;
+  // onOrdersGot.subscribe((msg) => {
+  //   let content = msg.content;
 
-    PubSub.publish("orders.got", { orders: JSON.parse(content) });
-  });
+  //   PubSub.publish("orders.got", { orders: JSON.parse(content) });
+  // });
 
   // order.* events
 
@@ -36,7 +36,10 @@ const Routing = require("../../../js/lib/MessageBroker/Routing");
   let onOrderPlaced = await orderTopic.createRoom({ name: "placed" });
 
   onOrderPlaced.subscribe((msg) => {
-    ordersTopic.publish({ room: "get", payload: "" });
+    let content = msg.content;
+    let order = JSON.parse(content);
+
+    PubSub.publish("order.placed", { order });
   });
 
   // Start Socket.io server
@@ -54,14 +57,20 @@ const Routing = require("../../../js/lib/MessageBroker/Routing");
   // Wait for connections
 
   io.on('connection', function (socket) {
-    emailSentEvent = PubSub.subscribe("orders.got", function (msg, message) {
-      let orders = message.orders;
+    let orderPlacedEvent = PubSub.subscribe("order.placed", function (msg, message) {
+      let order = message.order;
 
-      socket.emit('orders.got', { data: orders });
+      console.log(order);
+      
+      socket.emit('order.placed', {
+        data: {
+          uid: order.uid
+        }
+      });
     });
 
     socket.on('disconnect', function () {
-      PubSub.unsubscribe(emailSentEvent);
+      PubSub.unsubscribe(orderPlacedEvent);
     });
   });
 })();
