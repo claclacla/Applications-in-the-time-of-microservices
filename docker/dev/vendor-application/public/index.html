@@ -8,9 +8,22 @@
       let socket = io("http://localhost:3002", { path: "/order/vendor-application" });
 
       socket.on('order.placed', function (payload) {
-        console.log(payload);
-        
         let uid = payload.data;
+
+        fetch("http://localhost:3000/order/" + uid, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            credentials: 'include'
+          }
+        }).then(res => res.json())
+          .catch(error => console.error('Error:', error))
+          .then(response => {
+            let order = response.data;
+            console.log(order);
+
+            $("#orders").append("<li>Number: " + order.number + "</li>");
+          });
       });
     });
   </script>

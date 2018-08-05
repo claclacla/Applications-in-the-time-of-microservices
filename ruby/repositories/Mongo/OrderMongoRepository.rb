@@ -112,26 +112,21 @@ class OrderMongoRepository
   # TODO: Add not found rescue
 
   def getByUid uid:
-=begin
     resOrder = @mongo[:order].find({"uid" => uid}).limit(1).first
+
+    resOrderUserEntity = OrderUserEntity.new(
+      name: resOrder["user"]["name"],
+      email: resOrder["user"]["email"],
+      mobile: resOrder["user"]["mobile"]
+    )
 
     resOrderEntity = OrderEntity.new(
       uid: resOrder["uid"],
-      season: resOrder["season"],
-      code: resOrder["code"],
-      col_style_fabric_string: resOrder["col_style_fabric_string"],
-      user_zona: resOrder["user_zona"],
-      warehouse: resOrder["warehouse"],
-      amount: resOrder["amount"],
-      sockets: resOrder["sockets"]
+      number: resOrder["number"],
+      user: resOrderUserEntity
     )
 
-    if !resOrder["code29"].nil?
-      resOrderEntity.code29 = resOrder["code29"]
-    end
-
     return resOrderEntity
-=end
   end
 
   def mapGetFilters filters:

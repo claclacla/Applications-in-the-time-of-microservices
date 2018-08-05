@@ -19,6 +19,9 @@ const Routing = require("../../../../js/lib/MessageBroker/Routing");
   }
 
   let orderTopic = messageBroker.createTopic({ name: "order", routing: Routing.Explicit });
+
+  // order.place, order.placed
+
   let onOrderPlaced = await orderTopic.createRoom({ name: "placed" });
 
   PubSub.subscribe("order.place", (msg, payload) => {
@@ -29,6 +32,20 @@ const Routing = require("../../../../js/lib/MessageBroker/Routing");
     let content = msg.content;
 
     PubSub.publish("order.placed", JSON.parse(content));
+  });
+
+  // order.get, order.got
+
+  let onOrderGot = await orderTopic.createRoom({ name: "got" });
+
+  PubSub.subscribe("order.get", (msg, payload) => {
+    orderTopic.publish({ room: "get", payload });
+  });
+
+  onOrderGot.subscribe((msg) => {
+    let content = msg.content;
+
+    PubSub.publish("order.got", JSON.parse(content));
   });
 })();
 
@@ -45,6 +62,23 @@ router
         data: order
       });
     });
-  });
+  })
+  .get('/:uid', function (req, res, next) {
+    let uid = req.params.uid;
+
+    PubSub.publish("order.get", uid);
+
+    PubSub.subscribe("order.got", (msg, order) => {
+      PubSub.unsubscribe("order.got");
+
+      // if(!source) { 
+      //   return next(HttpError.NotFound());
+      // }
+
+      res.send({
+        data: order
+      });
+    });
+  })
 
 module.exports = router;

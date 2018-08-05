@@ -6,12 +6,6 @@ class OrderDataProvider < BaseDataProvider
     super(repository: repository)
   end
 
-  # TODO: Add match and filters
-
-  def get
-    @repository.get()
-  end
-
   # TODO: verify the orderUser type
 
   def place orderUserEntity:
@@ -32,5 +26,15 @@ class OrderDataProvider < BaseDataProvider
     resOrderEntity = @repository.add(orderEntity: orderEntity)
 
     resOrderEntity
+  end
+
+  def getByUid uid:
+    @repository.getByUid(uid: uid)
+  end
+
+  # TODO: Add match and filters
+
+  def get
+    @repository.get()
   end
 end

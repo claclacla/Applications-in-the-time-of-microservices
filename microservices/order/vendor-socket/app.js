@@ -59,13 +59,9 @@ const Routing = require("../../../js/lib/MessageBroker/Routing");
   io.on('connection', function (socket) {
     let orderPlacedEvent = PubSub.subscribe("order.placed", function (msg, message) {
       let order = message.order;
-
-      console.log(order);
       
       socket.emit('order.placed', {
-        data: {
-          uid: order.uid
-        }
+        data: order.uid
       });
     });
 
