@@ -151,6 +151,8 @@ Port: 8081
 
 Order
 
+* get
+* got
 * place
 * placed
 * updated
