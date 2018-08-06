@@ -1,6 +1,17 @@
 <html>
 
 <head>
+  <style>
+    table {
+      border-collapse: collapse;
+      border: 1px solid black;
+    }
+
+    table td {
+      border: 1px solid black;
+      padding: 6px;
+    }
+  </style>
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/socket.io.js"></script>
   <script>
@@ -22,7 +33,15 @@
             let order = response.data;
             console.log(order);
 
-            $("#orders").append("<li>Number: " + order.number + "</li>");
+            $("#orders").append(
+              "<tr>" +
+              "<td>" + order.uid + "</td>" +
+              "<td>" + order.number + "</td>" +
+              "<td>" + order.user.email + "</td>" +
+              "<td>" + order.status + "</td>" +
+              "<td><input type=\"button\" value=\"Update\"/></td>" +
+              "</tr>"
+            );
           });
       });
     });
@@ -33,8 +52,15 @@
   Orders
   <br />
   <br />
-  <ul id="orders">
-  </ul>
+  <table id="orders">
+    <tr>
+      <td>UID</td>
+      <td>Number</td>
+      <td>User</td>
+      <td>Status</td>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
 </body>
 
 </html>
