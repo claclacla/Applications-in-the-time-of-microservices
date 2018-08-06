@@ -19,7 +19,8 @@ class OrderMongoRepository
         :name => orderEntity.user.name,
         :email => orderEntity.user.email,
         :mobile => orderEntity.user.mobile
-      } 
+      },
+      :status => orderEntity.status 
     }
 
     result = @mongo[:order].insert_one(dbOrderEntity)
@@ -37,6 +38,7 @@ class OrderMongoRepository
     resOrderEntity = OrderEntity.new(
       uid: resOrder["uid"],
       number: resOrder["number"],
+      status: resOrder["status"],
       user: orderUserEntity
     )
 
@@ -123,6 +125,7 @@ class OrderMongoRepository
     resOrderEntity = OrderEntity.new(
       uid: resOrder["uid"],
       number: resOrder["number"],
+      status: resOrder["status"],
       user: resOrderUserEntity
     )
 
@@ -160,7 +163,8 @@ class OrderMongoRepository
     query.push({"$project" => {
       "uid" => 1,
       "number" => 1,
-      "user" => 1
+      "user" => 1,
+      "status" => 1
     }})
 
     if !filters.nil?
@@ -181,6 +185,7 @@ class OrderMongoRepository
       resOrderEntity = OrderEntity.new(
         uid: resOrder["uid"],
         number: resOrder["number"],
+        status: resOrder["status"],
         user: resOrderUserEntity
       )
   
