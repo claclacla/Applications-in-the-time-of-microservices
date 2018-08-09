@@ -157,7 +157,6 @@ Order
 * placed
 * patch
 * patched
-* updated
 
 Orders
 

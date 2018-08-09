@@ -48,6 +48,7 @@ onPatchOrder.subscribe { |delivery_info, properties, payload|
   patch = order["patch"]
 
   resOrderEntity = orderDataProvider.patchByUid(uid: uid, patch: patch)
+  puts resOrderEntity.status
 
   topic.publish(room: "patched", payload: resOrderEntity.to_json)
 }

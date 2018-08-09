@@ -20,13 +20,13 @@ const Routing = require("../../../js/lib/MessageBroker/Routing");
   printExecutionTime();
 
   let orderTopic = messageBroker.createTopic({ name: "order", routing: Routing.Explicit });
-  let orderUpdated = await orderTopic.createRoom({ name: "updated" });
+  let orderPatched = await orderTopic.createRoom({ name: "patched" });
 
-  orderUpdated.subscribe((msg) => {
+  orderPatched.subscribe((msg) => {
     let content = msg.content;
     console.log(" [x] %s", content.toString());
 
-    PubSub.publish("order.updated", { order: JSON.parse(content) });
+    PubSub.publish("order.patched", { order: JSON.parse(content) });
   });
 
   // Start Socket.io server
@@ -45,7 +45,7 @@ const Routing = require("../../../js/lib/MessageBroker/Routing");
 
   io.on('connection', function (socket) {
     let orderNumber = null;
-    let emailSentEvent = null;
+    let orderPatchedEvent = null;
 
     socket.on("order.events.subscribe", function (payload) {
       console.log("order.events.subscribe", payload);
@@ -53,18 +53,18 @@ const Routing = require("../../../js/lib/MessageBroker/Routing");
       orderNumber = payload.number;
     });
 
-    emailSentEvent = PubSub.subscribe("order.updated", function (msg, message) {
-      console.log("order.updated", message.order.number, orderNumber);
+    orderPatchedEvent = PubSub.subscribe("order.patched", function (msg, message) {
+      console.log("order.patched", message.order.number, orderNumber);
 
       if (message.order.number !== orderNumber) {
         return;
       }
-
-      socket.emit('order.updated', { data: order });
+      
+      socket.emit('order.patched', { data: message.order });
     });
 
     socket.on('disconnect', function () {
-      PubSub.unsubscribe(emailSentEvent);
+      PubSub.unsubscribe(orderPatchedEvent);
     });
   });
 })();

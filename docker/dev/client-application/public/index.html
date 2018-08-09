@@ -8,6 +8,7 @@
       $("#orderData").css({"display": "block"});
 
       $('#orderNumber').text(order.number);
+      $('#orderStatus').text(order.status);
 
       $('#userName').text(order.user.name);
       $('#userEmail').text(order.user.email);
@@ -39,14 +40,12 @@
             let order = response.data;
             showOrderData(order);
 
-/*
             socket.emit("order.events.subscribe", { number: order.number });
 
-            socket.on('order.updated', function (payload) {
-              let order = payload.message;
+            socket.on('order.patched', function (payload) {
+              let order = payload.data;
               showOrderData(order);
             });
-*/            
           });
       });
     });
@@ -59,6 +58,7 @@
   <br />
   <div id="orderData" style="display: none;">
     <div><b>Number:</b> <span id="orderNumber"></span></div>
+    <div><b>Status:</b> <span id="orderStatus"></span></div>
     <br />
     <div><b>User</b></div>
     <div>Name: <span id="userName"></span></div>

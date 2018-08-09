@@ -87,8 +87,10 @@ class OrderMongoRepository
   def patch query:, patch:
     resOrder = @mongo[:order].find_one_and_replace(
       query, { 
-      "$set" => patch
-    })
+        "$set" => patch
+      },
+      :return_document => :after
+    )
 
     resOrderUserEntity = OrderUserEntity.new(
       name: resOrder["user"]["name"],
