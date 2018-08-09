@@ -37,4 +37,8 @@ class OrderDataProvider < BaseDataProvider
   def get
     @repository.get()
   end
+
+  def patchByUid uid:, patch:
+    @repository.patch(query: {"uid" => uid}, patch: patch)
+  end
 end

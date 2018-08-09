@@ -15,6 +15,23 @@
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/socket.io.js"></script>
   <script>
+    function setOrderStatus(orderUid) {
+      let orderStatus = $('select[name=' + orderUid + ']').val();
+
+      fetch("http://localhost:3000/order/" + orderUid + "/status", {
+        method: 'PUT',
+        body: JSON.stringify({ status: orderStatus }),
+        headers: {
+          'Content-Type': 'application/json',
+          credentials: 'include'
+        }
+      }).then(res => res.json())
+        .catch(error => console.error('Error:', error))
+        .then(response => {
+
+        });
+    }
+
     $(function () {
       const ORDER_STATUSES = ["New", "In preparation", "Delivered"];
       let socket = io("http://localhost:3002", { path: "/order/vendor-application" });
@@ -44,7 +61,7 @@
               }
             });
 
-            statusField = "<select>" + statusField + "</select>";
+            statusField = "<select name='" + order.uid + "'>" + statusField + "</select>";
 
             $("#orders").append(
               "<tr>" +
@@ -52,7 +69,7 @@
               "<td>" + order.number + "</td>" +
               "<td>" + order.user.email + "</td>" +
               "<td>" + statusField + "</td>" +
-              "<td><input type=\"button\" value=\"Update\"/></td>" +
+              "<td><input type=\"button\" value=\"Update\" onClick=\"setOrderStatus('" + order.uid + "');\"/></td>" +
               "</tr>"
             );
           });

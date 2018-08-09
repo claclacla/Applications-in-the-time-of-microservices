@@ -84,30 +84,26 @@ class OrderMongoRepository
 =end
   end
 
-  def patch query:, orderData:
-=begin
+  def patch query:, patch:
     resOrder = @mongo[:order].find_one_and_replace(
       query, { 
-      "$set" => orderData
+      "$set" => patch
     })
+
+    resOrderUserEntity = OrderUserEntity.new(
+      name: resOrder["user"]["name"],
+      email: resOrder["user"]["email"],
+      mobile: resOrder["user"]["mobile"]
+    )
 
     resOrderEntity = OrderEntity.new(
       uid: resOrder["uid"],
-      season: resOrder["season"],
-      code: resOrder["code"],
-      col_style_fabric_string: resOrder["col_style_fabric_string"],
-      user_zona: resOrder["user_zona"],
-      warehouse: resOrder["warehouse"],
-      amount: resOrder["amount"],
-      sockets: resOrder["sockets"]
+      number: resOrder["number"],
+      status: resOrder["status"],
+      user: resOrderUserEntity
     )
 
-    if !resOrder["code29"].nil?
-      resOrderEntity.code29 = resOrder["code29"]
-    end
-
     return resOrderEntity
-=end
   end
 
   # TODO: Add uid verification

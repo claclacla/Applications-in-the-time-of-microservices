@@ -47,6 +47,20 @@ const Routing = require("../../../../js/lib/MessageBroker/Routing");
 
     PubSub.publish("order.got", JSON.parse(content));
   });
+
+  // order.patch, order.patched
+
+  let onOrderPatched = await orderTopic.createRoom({ name: "patched" });
+
+  PubSub.subscribe("order.patch", (msg, payload) => {
+    orderTopic.publish({ room: "patch", payload: JSON.stringify(payload) });
+  });
+
+  onOrderPatched.subscribe((msg) => {
+    let content = msg.content;
+
+    PubSub.publish("order.patched", JSON.parse(content));
+  });
 })();
 
 router
@@ -74,6 +88,25 @@ router
       // if(!source) { 
       //   return next(HttpError.NotFound());
       // }
+
+      res.send({
+        data: order
+      });
+    });
+  })
+
+  // status
+
+  .put('/:uid/status', function (req, res, next) {
+    let uid = req.params.uid;
+    let statusDto = req.body;
+
+    // TODO: Add a mapper
+    
+    PubSub.publish("order.patch", { uid, patch: statusDto });
+
+    PubSub.subscribe("order.patched", (msg, order) => {
+      PubSub.unsubscribe("order.patched");
 
       res.send({
         data: order

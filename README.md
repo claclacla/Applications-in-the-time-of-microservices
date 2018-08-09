@@ -155,6 +155,8 @@ Order
 * got
 * place
 * placed
+* patch
+* patched
 * updated
 
 Orders
