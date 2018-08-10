@@ -50,6 +50,8 @@ onPatchOrder.subscribe { |delivery_info, properties, payload|
 
   if delivery_info.routing_key == "patch.replace"
     operation = OrderDataProvider.PatchReplace
+  elsif delivery_info.routing_key == "patch.add"
+    operation = OrderDataProvider.PatchAdd
   end  
 
   # TODO: Check if operation is nil

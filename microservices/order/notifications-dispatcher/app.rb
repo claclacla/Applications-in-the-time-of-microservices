@@ -3,11 +3,6 @@ require 'json'
 require_relative "../../../ruby/lib/printExecutionTime"
 require_relative "../../../ruby/lib/config"
 
-require_relative "../../../ruby/repositories/Mongo/lib/connect"
-require_relative "../../../ruby/entities/OrderUserEntity"
-require_relative "../../../ruby/repositories/Mongo/OrderMongoRepository"
-require_relative "../../../ruby/dataProvider/OrderDataProvider"
-
 require_relative '../../../ruby/lib/MessageBroker/MessageBroker'
 require_relative '../../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
 require_relative '../../../ruby/lib/MessageBroker/Routing'
@@ -67,14 +62,12 @@ onOrderPlaced.subscribe { |delivery_info, properties, payload|
 #
 #  # TODO: Create a DTO for this object
 #
-  emailSentData = {
-    "order" => {
-      "number" => order["number"]
-    },
-    "receipt" => {
-      "code" => "oij45tkj8d4G-Wed5" #dispatcherManagerReceipt["code"]
-    }
-  }
+  # message = {
+  #   "type" => "email"
+  #   "receipt" => {
+  #     "code" => "oij45tkj8d4G-Wed5" #dispatcherManagerReceipt["code"]
+  #   }
+  # }
  
-  #orderDataProvider.setOrderProperty(uid: uid, patch: patch)
+  #orderTopic.publish(room: "patch.add", payload: message.to_json)
 }

@@ -6,10 +6,15 @@ class OrderDataProvider < BaseDataProvider
     super(repository: repository)
 
     @@PatchReplace = repository.PatchReplace
+    @@PatchAdd = repository.PatchAdd
   end
 
   def OrderDataProvider.PatchReplace
     return @@PatchReplace
+  end
+
+  def OrderDataProvider.PatchAdd
+    return @@PatchAdd
   end
 
   # TODO: verify the orderUser type

@@ -7,10 +7,15 @@ class OrderMongoRepository
     @mongo = mongo 
 
     @@PatchReplace = "replace"
+    @@PatchAdd = "add"
   end
 
   def PatchReplace
     return @@PatchReplace
+  end
+
+  def PatchAdd
+    return @@PatchAdd
   end
 
   # TODO: Add parameter type verification
@@ -95,7 +100,11 @@ class OrderMongoRepository
 
     if operation == OrderMongoRepository.PatchReplace
       update = { "$set" => patch }
-    end  
+    elsif operation == OrderMongoRepository.PatchAdd
+      update = { "$push" => patch }
+    end 
+    
+    # TODO: Check if update is nil
 
     resOrder = @mongo[:order].find_one_and_replace(
       query, update, :return_document => :after
