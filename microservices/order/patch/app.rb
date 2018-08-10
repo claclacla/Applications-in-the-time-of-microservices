@@ -31,8 +31,8 @@ mongo = mongoConnect(
 
 printExecutionTime
 
-topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
-onPatchOrder = topic.createRoom(name: "patch")
+topic = messageBroker.createTopic(name: "order", routing: Routing.PatternMatching)
+onPatchOrder = topic.createRoom(name: "patch.*")
 
 orderMongoRepository = OrderMongoRepository.new(mongo: mongo)
 orderDataProvider = OrderDataProvider.new(repository: orderMongoRepository)
@@ -40,15 +40,21 @@ orderDataProvider = OrderDataProvider.new(repository: orderMongoRepository)
 onPatchOrder.subscribe { |delivery_info, properties, payload|
   puts " [x] Received #{payload}"
 
-  order = JSON.parse payload
+  payloadData = JSON.parse payload
 
-  # TODO: Add an order parser and mapper
+  # TODO: Add a payload data parser and mapper
   
-  uid = order["uid"]
-  patch = order["patch"]
+  uid = payloadData["uid"]
+  patch = payloadData["patch"]
+  operation = nil
 
-  resOrderEntity = orderDataProvider.patchByUid(uid: uid, patch: patch)
-  puts resOrderEntity.status
+  if delivery_info.routing_key == "patch.replace"
+    operation = OrderDataProvider.PatchReplace
+  end  
+
+  # TODO: Check if operation is nil
+
+  resOrderEntity = orderDataProvider.patch(uid: uid, operation: operation, patch: patch)
 
   topic.publish(room: "patched", payload: resOrderEntity.to_json)
 }

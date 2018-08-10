@@ -4,6 +4,12 @@ require_relative "../entities/OrderEntity"
 class OrderDataProvider < BaseDataProvider
   def initialize repository:
     super(repository: repository)
+
+    @@PatchReplace = repository.PatchReplace
+  end
+
+  def OrderDataProvider.PatchReplace
+    return @@PatchReplace
   end
 
   # TODO: verify the orderUser type
@@ -38,7 +44,7 @@ class OrderDataProvider < BaseDataProvider
     @repository.get()
   end
 
-  def patchByUid uid:, patch:
-    @repository.patch(query: {"uid" => uid}, patch: patch)
+  def patch uid:, operation:, patch:
+    @repository.patch(query: {"uid" => uid}, operation: operation, patch: patch)
   end
 end

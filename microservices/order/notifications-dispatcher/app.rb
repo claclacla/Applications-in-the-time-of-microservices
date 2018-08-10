@@ -1,8 +1,12 @@
 require 'json'
-require 'net/http'
 
 require_relative "../../../ruby/lib/printExecutionTime"
 require_relative "../../../ruby/lib/config"
+
+require_relative "../../../ruby/repositories/Mongo/lib/connect"
+require_relative "../../../ruby/entities/OrderUserEntity"
+require_relative "../../../ruby/repositories/Mongo/OrderMongoRepository"
+require_relative "../../../ruby/dataProvider/OrderDataProvider"
 
 require_relative '../../../ruby/lib/MessageBroker/MessageBroker'
 require_relative '../../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
@@ -17,12 +21,18 @@ rescue MessageBrokerConnectionRefused
   abort "RabbitMQ connection refused"
 end 
 
+mongo = mongoConnect(
+  host: config["mongodb"]["host"], 
+  port: config["mongodb"]["port"], 
+  user: config["mongodb"]["username"], 
+  password: config["mongodb"]["password"], 
+  database: config["mongodb"]["database"]
+)
+
 printExecutionTime
 
-orderTopic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
+orderTopic = messageBroker.createTopic(name: "order", routing: Routing.PatternMatching)
 onOrderPlaced = orderTopic.createRoom(name: "placed")
-
-messageTopic = messageBroker.createTopic(name: "message", routing: Routing.Explicit)
 
 onOrderPlaced.subscribe { |delivery_info, properties, payload|
   puts " [x] Received #{payload}"
@@ -66,5 +76,5 @@ onOrderPlaced.subscribe { |delivery_info, properties, payload|
     }
   }
  
-  messageTopic.publish(room: "email.sent", payload: emailSentData.to_json)
+  #orderDataProvider.setOrderProperty(uid: uid, patch: patch)
 }

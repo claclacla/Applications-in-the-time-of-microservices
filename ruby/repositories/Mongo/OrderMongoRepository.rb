@@ -5,6 +5,12 @@ require_relative "../IRepository"
 class OrderMongoRepository
   def initialize mongo:
     @mongo = mongo 
+
+    @@PatchReplace = "replace"
+  end
+
+  def PatchReplace
+    return @@PatchReplace
   end
 
   # TODO: Add parameter type verification
@@ -84,12 +90,15 @@ class OrderMongoRepository
 =end
   end
 
-  def patch query:, patch:
+  def patch query:, operation:, patch:
+    update = nil
+
+    if operation == OrderMongoRepository.PatchReplace
+      update = { "$set" => patch }
+    end  
+
     resOrder = @mongo[:order].find_one_and_replace(
-      query, { 
-        "$set" => patch
-      },
-      :return_document => :after
+      query, update, :return_document => :after
     )
 
     resOrderUserEntity = OrderUserEntity.new(

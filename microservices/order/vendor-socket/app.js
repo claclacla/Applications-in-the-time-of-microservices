@@ -32,7 +32,7 @@ const Routing = require("../../../js/lib/MessageBroker/Routing");
 
   // order.* events
 
-  let orderTopic = messageBroker.createTopic({ name: "order", routing: Routing.Explicit });
+  let orderTopic = messageBroker.createTopic({ name: "order", routing: Routing.PatternMatching });
   let onOrderPlaced = await orderTopic.createRoom({ name: "placed" });
 
   onOrderPlaced.subscribe((msg) => {

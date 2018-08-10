@@ -31,7 +31,7 @@ mongo = mongoConnect(
 
 printExecutionTime
 
-topic = messageBroker.createTopic(name: "order", routing: Routing.Explicit)
+topic = messageBroker.createTopic(name: "order", routing: Routing.PatternMatching)
 onGetOrder = topic.createRoom(name: "get")
 
 orderMongoRepository = OrderMongoRepository.new(mongo: mongo)

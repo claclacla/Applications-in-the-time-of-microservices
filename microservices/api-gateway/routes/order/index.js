@@ -18,7 +18,7 @@ const Routing = require("../../../../js/lib/MessageBroker/Routing");
     return;
   }
 
-  let orderTopic = messageBroker.createTopic({ name: "order", routing: Routing.Explicit });
+  let orderTopic = messageBroker.createTopic({ name: "order", routing: Routing.PatternMatching });
 
   // order.place, order.placed
 
@@ -53,7 +53,7 @@ const Routing = require("../../../../js/lib/MessageBroker/Routing");
   let onOrderPatched = await orderTopic.createRoom({ name: "patched" });
 
   PubSub.subscribe("order.patch", (msg, payload) => {
-    orderTopic.publish({ room: "patch", payload: JSON.stringify(payload) });
+    orderTopic.publish({ room: "patch.replace", payload: JSON.stringify(payload) });
   });
 
   onOrderPatched.subscribe((msg) => {
