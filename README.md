@@ -108,7 +108,7 @@ docker-compose 1.19.0+
 
 ### Development
 
-```
+```bash
 # Change the directory to the docker development 
 cd docker/dev
 
@@ -122,8 +122,14 @@ sudo docker-compose up -d
 # to connect to the client application
 http://localhost:8080
 
-# Verify the microservices environment placing a new order 
-# using the button "Insert order"
+# And in another tab the following address
+# to connect to the vendor application
+http://localhost:8081
+
+# Place a new order using the client application button "Insert order".
+# The new order will appear directly in the vendor application.
+# From this page it is possible to change the order status
+# and each update will refresh automatically the client application data.
 
 ```
 
