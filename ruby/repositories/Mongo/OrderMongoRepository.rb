@@ -3,11 +3,11 @@ require_relative "../../entities/OrderEntity"
 require_relative "../IRepository"
 
 class OrderMongoRepository
+  @@PatchReplace = "replace"
+  @@PatchAdd = "add"
+  
   def initialize mongo:
     @mongo = mongo 
-
-    @@PatchReplace = "replace"
-    @@PatchAdd = "add"
   end
 
   def PatchReplace
@@ -98,14 +98,16 @@ class OrderMongoRepository
   def patch query:, operation:, patch:
     update = nil
 
-    if operation == OrderMongoRepository.PatchReplace
+    if operation == @@PatchReplace
       update = { "$set" => patch }
-    elsif operation == OrderMongoRepository.PatchAdd
+    elsif operation == @@PatchAdd
       update = { "$push" => patch }
     end 
     
     # TODO: Check if update is nil
 
+    puts query
+    puts update
     resOrder = @mongo[:order].find_one_and_replace(
       query, update, :return_document => :after
     )

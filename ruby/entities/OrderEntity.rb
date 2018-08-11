@@ -1,5 +1,6 @@
 require_relative './BaseEntity'
 require_relative "./OrderStatusEntity"
+require_relative "./OrderMessagesEntity"
 
 # TODO: Add parameters verification
 
@@ -12,6 +13,7 @@ class OrderEntity < BaseEntity
     @number = number
     @user = user
     @status = status
+    @messages = OrderMessagesEntity.new
   end
 
   def as_json(options={})
@@ -19,7 +21,8 @@ class OrderEntity < BaseEntity
       :uid => @uid,
       :number => @number,
       :user => @user,
-      :status => @status
+      :status => @status,
+      :messages => @messages
     }
   end
 end

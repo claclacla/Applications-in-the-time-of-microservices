@@ -108,10 +108,12 @@ services:
       - APP_ENV=development
     networks:
       - rabbitmq_network
+      - mongodb_network
     volumes:
       - "${APP_FOLDER}:/usr/src/app"
     links:
       - rabbitmq
+      - mongodb
     tty: true
     stdin_open: true
 

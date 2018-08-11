@@ -3,6 +3,11 @@ require 'json'
 require_relative "../../../ruby/lib/printExecutionTime"
 require_relative "../../../ruby/lib/config"
 
+require_relative "../../../ruby/repositories/Mongo/lib/connect"
+require_relative "../../../ruby/entities/OrderUserEntity"
+require_relative "../../../ruby/repositories/Mongo/OrderMongoRepository"
+require_relative "../../../ruby/dataProvider/OrderDataProvider"
+
 require_relative '../../../ruby/lib/MessageBroker/MessageBroker'
 require_relative '../../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
 require_relative '../../../ruby/lib/MessageBroker/Routing'
@@ -16,18 +21,25 @@ rescue MessageBrokerConnectionRefused
   abort "RabbitMQ connection refused"
 end 
 
-mongo = mongoConnect(
-  host: config["mongodb"]["host"], 
-  port: config["mongodb"]["port"], 
-  user: config["mongodb"]["username"], 
-  password: config["mongodb"]["password"], 
-  database: config["mongodb"]["database"]
-)
+begin
+  mongo = mongoConnect(
+    host: config["mongodb"]["host"], 
+    port: config["mongodb"]["port"], 
+    user: config["mongodb"]["username"], 
+    password: config["mongodb"]["password"], 
+    database: config["mongodb"]["database"]
+  )
+rescue => e
+  puts e
+end
 
 printExecutionTime
 
 orderTopic = messageBroker.createTopic(name: "order", routing: Routing.PatternMatching)
 onOrderPlaced = orderTopic.createRoom(name: "placed")
+
+orderMongoRepository = OrderMongoRepository.new(mongo: mongo)
+orderDataProvider = OrderDataProvider.new(repository: orderMongoRepository)
 
 onOrderPlaced.subscribe { |delivery_info, properties, payload|
   puts " [x] Received #{payload}"
@@ -62,12 +74,6 @@ onOrderPlaced.subscribe { |delivery_info, properties, payload|
 #
 #  # TODO: Create a DTO for this object
 #
-  # message = {
-  #   "type" => "email"
-  #   "receipt" => {
-  #     "code" => "oij45tkj8d4G-Wed5" #dispatcherManagerReceipt["code"]
-  #   }
-  # }
  
-  #orderTopic.publish(room: "patch.add", payload: message.to_json)
+  resOrderEntity = orderDataProvider.addEmail(uid: order["uid"], receipt: "oij45tkj8d4G-Wed5")
 }

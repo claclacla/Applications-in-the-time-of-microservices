@@ -1,5 +1,6 @@
 require_relative "./BaseDataProvider"
 require_relative "../entities/OrderEntity"
+require_relative "../entities/EmailEntity"
 
 class OrderDataProvider < BaseDataProvider
   def initialize repository:
@@ -51,5 +52,18 @@ class OrderDataProvider < BaseDataProvider
 
   def patch uid:, operation:, patch:
     @repository.patch(query: {"uid" => uid}, operation: operation, patch: patch)
+  end
+
+  # Messages
+
+  def addEmail uid:, receipt:
+    patch = { 
+      "messages.email" => {
+        "status" => EmailEntity.StatusNew,
+        "receipt" => receipt
+      }
+    }
+
+    @repository.patch(query: {"uid" => uid}, operation: @repository.PatchAdd, patch: patch)
   end
 end
