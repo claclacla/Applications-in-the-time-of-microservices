@@ -11,6 +11,7 @@ require_relative "../../../ruby/dtos/DispatcherManagerEmailPlaceDto"
 require_relative '../../../ruby/lib/MessageBroker/MessageBroker'
 require_relative '../../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
 require_relative '../../../ruby/lib/MessageBroker/Routing'
+require_relative "../../../ruby/lib/MessageBroker/lib/CorrelationID"
 
 dispatcher = RabbitMQDispatcher.new(host: config["rabbitmq"]["host"])
 messageBroker = MessageBroker.new(dispatcher: dispatcher)
@@ -63,7 +64,7 @@ onOrderPlaced.subscribe { |delivery_info, properties, payload|
   dispatcherManagerTopic.publish(
     room: "email.place", 
     payload: dispatcherManagerEmailPlaceDto.to_json,
-    correlationId: "message-id-984ruJwlD46ofw83",
+    correlationId: CorrelationID.create,
     replyTo: "dispatched"
   )
 
