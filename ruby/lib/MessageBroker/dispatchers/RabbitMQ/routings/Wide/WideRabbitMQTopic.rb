@@ -21,7 +21,11 @@ class WideRabbitMQTopic < BaseRabbitMQTopic
     return room
   end
 
-  def publish payload:
-    @exchange.publish(payload)
+  def publish payload:, correlationId: nil, replyTo: nil
+    @exchange.publish(
+      payload, 
+      :correlation_id => correlationId,
+      :replyTo => replyTo
+    )
   end
 end
