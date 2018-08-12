@@ -106,8 +106,6 @@ class OrderMongoRepository
     
     # TODO: Check if update is nil
 
-    puts query
-    puts update
     resOrder = @mongo[:order].find_one_and_replace(
       query, update, :return_document => :after
     )

@@ -155,7 +155,7 @@ Port: 8081
 
 #### MessageBroker topics
 
-Order
+order
 
 * get
 * got
@@ -164,10 +164,15 @@ Order
 * patch
 * patched
 
-Orders
+orders
 
 * get
 * got
+
+dispatcher-manager
+
+* email.place
+* email.placed
 
 --------------------------------------------------------------------------------
 

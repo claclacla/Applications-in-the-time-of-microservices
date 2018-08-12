@@ -3,21 +3,38 @@ require 'json'
 require_relative "../../../ruby/lib/printExecutionTime"
 require_relative "../../../ruby/lib/config"
 
-# TODO: This endpoint may have a response with a 201 status
-# TODO: Complete the definition of the response object
+require_relative '../../../ruby/lib/MessageBroker/MessageBroker'
+require_relative '../../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
+require_relative '../../../ruby/lib/MessageBroker/Routing'
+
+dispatcher = RabbitMQDispatcher.new(host: config["rabbitmq"]["host"])
+messageBroker = MessageBroker.new(dispatcher: dispatcher)
+
+begin
+  messageBroker.connect
+rescue MessageBrokerConnectionRefused
+  abort "RabbitMQ connection refused"
+end
 
 printExecutionTime
 
-# post '/email' do
+dispatcherManagerTopic = messageBroker.createTopic(name: "dispatcher-manager", routing: Routing.Explicit)
+onPlaceEmail = dispatcherManagerTopic.createRoom(name: "email.place")
 
-#   # TODO: Add a message verification
+onPlaceEmail.subscribe { |delivery_info, properties, payload|
+  puts " [x] Received #{payload}"
 
-#   message = JSON.parse request.body.read
+  message = JSON.parse payload
 
-#   # Dispatcher manager operations
+  # TODO: Define the object for this response
 
-#   # ...
+  dispatchedData = {
+    "receipt" => "oij45tkj8d4G-Wed5"
+  }
 
-#   content_type :json
-#   { :code => 'D9r8Gu39r8B2G3ur' }.to_json
-# end
+  dispatcherManagerTopic.publish(
+    room: "email.placed", 
+    payload: dispatchedData.to_json, 
+    correlationId: properties.correlation_id
+  )
+}

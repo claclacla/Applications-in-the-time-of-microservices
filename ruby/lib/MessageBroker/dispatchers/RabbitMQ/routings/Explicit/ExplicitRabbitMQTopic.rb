@@ -21,7 +21,12 @@ class ExplicitRabbitMQTopic < BaseRabbitMQTopic
     return room
   end
 
-  def publish room:, payload:
-    @exchange.publish(payload, :routing_key => room)
+  def publish room:, payload:, correlationId: nil, replyTo: nil
+    @exchange.publish(
+      payload, 
+      :routing_key => room, 
+      :correlation_id => correlationId,
+      :replyTo => replyTo
+    )
   end
 end

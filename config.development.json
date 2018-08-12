@@ -1,4 +1,7 @@
 {
+  "contacts": {
+    "email": "seconddesire@gmail.com"
+  },
   "mongodb": {
     "host": "mongodb",
     "user": "",
