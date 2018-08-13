@@ -56,11 +56,11 @@ class OrderDataProvider < BaseDataProvider
 
   # Messages
 
-  def addEmail uid:, receipt:
+  def attachEmail uid:, caseNumber:
     patch = { 
       "messages.email" => {
-        "status" => EmailEntity.StatusNew,
-        "receipt" => receipt
+        "status" => EmailEntity.RequestSent,
+        "caseNumber" => caseNumber
       }
     }
 

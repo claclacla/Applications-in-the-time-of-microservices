@@ -70,4 +70,11 @@ onOrderPlaced.subscribe { |delivery_info, properties, payload|
     correlationId: dispatcherManagerEmailPlaceDto.caseNumber,
     replyTo: "email.placed"
   )
+
+  # attach email case number to the order
+
+  resOrderEntity = orderDataProvider.attachEmail(
+    uid: order["uid"], 
+    caseNumber: dispatcherManagerEmailPlaceDto.caseNumber
+  )
 }

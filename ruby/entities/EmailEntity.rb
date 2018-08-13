@@ -3,24 +3,24 @@ require_relative './BaseEntity'
 # TODO: Add parameters verification
 
 class EmailEntity < BaseEntity
-  @@StatusRequestSent = "RequestSent"
-  @@StatusRequestAccepted = "RequestAccepted"
+  @@RequestSent = "RequestSent"
+  @@RequestAccepted = "RequestAccepted"
   
   attr_accessor :uid, :number, :user, :status
   
-  def initialize uid: nil, status:, receipt:
+  def initialize uid: nil, status: @@RequestSent, receipt:
     super(uid: uid)
 
     @status = status
     @receipt = receipt
   end
 
-  def EmailEntity.StatusRequestSent
-    return @@StatusRequestSent
+  def EmailEntity.RequestSent
+    return @@RequestSent
   end
 
-  def EmailEntity.StatusRequestAccepted
-    return @@StatusRequestAccepted
+  def EmailEntity.RequestAccepted
+    return @@RequestAccepted
   end
 
   def as_json(options={})
