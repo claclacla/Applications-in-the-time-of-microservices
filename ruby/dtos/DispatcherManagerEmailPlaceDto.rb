@@ -1,11 +1,10 @@
-require_relative './BaseDto'
+require_relative './BaseDispatcherManagerPlaceDto'
 
 # TODO: Add parameters verification
 
-class DispatcherManagerEmailPlaceDto < BaseDto
-  @@StatusNew = "New"
-  
+class DispatcherManagerEmailPlaceDto < BaseDispatcherManagerPlaceDto
   attr_accessor :uid, :from, :to, :title, :body
+  attr_reader :caseNumber
   
   def initialize uid: nil, from:, to:, title:, body:
     super(uid: uid)
@@ -19,6 +18,7 @@ class DispatcherManagerEmailPlaceDto < BaseDto
   def as_json(options={})
     {
       :uid => @uid,
+      :caseNumber => @caseNumber,
       :from => @from,
       :to => @to,
       :title => @title,

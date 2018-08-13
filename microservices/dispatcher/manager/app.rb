@@ -32,8 +32,9 @@ onPlaceEmail.subscribe { |delivery_info, properties, payload|
     "receipt" => "oij45tkj8d4G-Wed5"
   }
 
+  puts properties.reply_to
   dispatcherManagerTopic.publish(
-    room: "email.placed", 
+    room: properties.reply_to, 
     payload: dispatchedData.to_json, 
     correlationId: properties.correlation_id
   )

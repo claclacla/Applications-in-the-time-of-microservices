@@ -26,7 +26,7 @@ class ExplicitRabbitMQTopic < BaseRabbitMQTopic
       payload, 
       :routing_key => room, 
       :correlation_id => correlationId,
-      :replyTo => replyTo
+      :reply_to => replyTo
     )
   end
 end

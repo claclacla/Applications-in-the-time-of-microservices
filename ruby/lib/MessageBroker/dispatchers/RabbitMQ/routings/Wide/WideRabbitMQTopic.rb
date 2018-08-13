@@ -25,7 +25,7 @@ class WideRabbitMQTopic < BaseRabbitMQTopic
     @exchange.publish(
       payload, 
       :correlation_id => correlationId,
-      :replyTo => replyTo
+      :reply_to => replyTo
     )
   end
 end

@@ -40,19 +40,22 @@ orderDataProvider = OrderDataProvider.new(repository: orderMongoRepository)
 orderTopic = messageBroker.createTopic(name: "order", routing: Routing.PatternMatching)
 onOrderPlaced = orderTopic.createRoom(name: "placed")
 
-# dispatcher-manager
+# subscribe to the dispatcher-manager topic
 
 dispatcherManagerTopic = messageBroker.createTopic(name: "dispatcher-manager", routing: Routing.Explicit)
+
 onEmailPlaced = dispatcherManagerTopic.createRoom(name: "email.placed")
 
 onEmailPlaced.subscribe(block: false) { |delivery_info, properties, payload|
-  puts "correlation id: " + properties[:correlation_id]
+  puts properties[:correlation_id]
 }
 
 onOrderPlaced.subscribe { |delivery_info, properties, payload|
   puts " [x] Received #{payload}"
 
   order = JSON.parse payload
+
+  # publish the email data
 
   dispatcherManagerEmailPlaceDto = DispatcherManagerEmailPlaceDto.new(
     from: config["contacts"]["email"],
@@ -64,9 +67,7 @@ onOrderPlaced.subscribe { |delivery_info, properties, payload|
   dispatcherManagerTopic.publish(
     room: "email.place", 
     payload: dispatcherManagerEmailPlaceDto.to_json,
-    correlationId: CorrelationID.create,
-    replyTo: "dispatched"
+    correlationId: dispatcherManagerEmailPlaceDto.caseNumber,
+    replyTo: "email.placed"
   )
-
-  resOrderEntity = orderDataProvider.addEmail(uid: order["uid"], receipt: "oij45tkj8d4G-Wed5")
 }
