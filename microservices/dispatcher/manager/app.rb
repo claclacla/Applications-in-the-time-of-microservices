@@ -3,6 +3,8 @@ require 'json'
 require_relative "../../../ruby/lib/printExecutionTime"
 require_relative "../../../ruby/lib/config"
 
+require_relative "../../../ruby/dtos/DispatcherManagerPlaceResponseDto"
+
 require_relative '../../../ruby/lib/MessageBroker/MessageBroker'
 require_relative '../../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
 require_relative '../../../ruby/lib/MessageBroker/Routing'
@@ -18,24 +20,21 @@ end
 
 printExecutionTime
 
-dispatcherManagerTopic = messageBroker.createTopic(name: "dispatcher-manager", routing: Routing.Explicit)
-onPlaceEmail = dispatcherManagerTopic.createRoom(name: "email.place")
+dispatcherManagerTopic = messageBroker.createTopic(name: "dispatcher-manager", routing: Routing.PatternMatching)
+onPlaceMessage = dispatcherManagerTopic.createRoom(name: "message.place.request.*")
 
-onPlaceEmail.subscribe { |delivery_info, properties, payload|
+onPlaceMessage.subscribe { |delivery_info, properties, payload|
   puts " [x] Received #{payload}"
 
   message = JSON.parse payload
 
-  # TODO: Define the object for this response
+  dispatcherManagerPlaceResponseDto = DispatcherManagerPlaceResponseDto.new(
+    status: DispatcherManagerPlaceResponseDto.Placed
+  )
 
-  dispatchedData = {
-    "receipt" => "oij45tkj8d4G-Wed5"
-  }
-
-  puts properties.reply_to
   dispatcherManagerTopic.publish(
     room: properties.reply_to, 
-    payload: dispatchedData.to_json, 
+    payload: dispatcherManagerPlaceResponseDto.to_json, 
     correlationId: properties.correlation_id
   )
 }

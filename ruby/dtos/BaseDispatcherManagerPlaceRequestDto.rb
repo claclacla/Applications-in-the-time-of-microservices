@@ -4,7 +4,7 @@ require_relative './BaseDto'
 
 # TODO: Add parameters verification
 
-class BaseDispatcherManagerPlaceDto < BaseDto 
+class BaseDispatcherManagerPlaceRequestDto < BaseDto 
   attr_accessor :uid
   attr_reader :caseNumber
 

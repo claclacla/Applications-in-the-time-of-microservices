@@ -7,7 +7,7 @@ require_relative "../../../ruby/repositories/Mongo/lib/connect"
 require_relative "../../../ruby/repositories/Mongo/OrderMongoRepository"
 require_relative "../../../ruby/dataProvider/OrderDataProvider"
 require_relative "../../../ruby/entities/EmailEntity"
-require_relative "../../../ruby/dtos/DispatcherManagerEmailPlaceDto"
+require_relative "../../../ruby/dtos/DispatcherManagerEmailPlaceRequestDto"
 
 require_relative '../../../ruby/lib/MessageBroker/MessageBroker'
 require_relative '../../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
@@ -43,11 +43,11 @@ onOrderPlaced = orderTopic.createRoom(name: "placed")
 
 # subscribe to the dispatcher-manager topic
 
-dispatcherManagerTopic = messageBroker.createTopic(name: "dispatcher-manager", routing: Routing.Explicit)
+dispatcherManagerTopic = messageBroker.createTopic(name: "dispatcher-manager", routing: Routing.PatternMatching)
 
-onEmailPlaced = dispatcherManagerTopic.createRoom(name: "email.placed")
+onPlaceEmailResponse = dispatcherManagerTopic.createRoom(name: "message.place.response.email")
 
-onEmailPlaced.subscribe(block: false) { |delivery_info, properties, payload|
+onPlaceEmailResponse.subscribe(block: false) { |delivery_info, properties, payload|
   orderDataProvider.setEmailStatus(
     caseNumber: properties[:correlation_id], 
     status: EmailEntity.RequestAccepted
@@ -61,7 +61,7 @@ onOrderPlaced.subscribe { |delivery_info, properties, payload|
 
   # publish the email data
 
-  dispatcherManagerEmailPlaceDto = DispatcherManagerEmailPlaceDto.new(
+  dispatcherManagerEmailPlaceRequestDto = DispatcherManagerEmailPlaceRequestDto.new(
     from: config["contacts"]["email"],
     to: order["user"]["email"],
     title: "New order",
@@ -69,16 +69,16 @@ onOrderPlaced.subscribe { |delivery_info, properties, payload|
   )
  
   dispatcherManagerTopic.publish(
-    room: "email.place", 
-    payload: dispatcherManagerEmailPlaceDto.to_json,
-    correlationId: dispatcherManagerEmailPlaceDto.caseNumber,
-    replyTo: "email.placed"
+    room: "message.place.request.email", 
+    payload: dispatcherManagerEmailPlaceRequestDto.to_json,
+    correlationId: dispatcherManagerEmailPlaceRequestDto.caseNumber,
+    replyTo: "message.place.response.email"
   )
 
   # attach email case number to the order
 
   orderDataProvider.attachEmail(
     uid: order["uid"], 
-    caseNumber: dispatcherManagerEmailPlaceDto.caseNumber
+    caseNumber: dispatcherManagerEmailPlaceRequestDto.caseNumber
   )
 }

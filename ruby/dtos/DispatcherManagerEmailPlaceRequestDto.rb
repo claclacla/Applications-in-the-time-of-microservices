@@ -1,8 +1,8 @@
-require_relative './BaseDispatcherManagerPlaceDto'
+require_relative './BaseDispatcherManagerPlaceRequestDto'
 
 # TODO: Add parameters verification
 
-class DispatcherManagerEmailPlaceDto < BaseDispatcherManagerPlaceDto
+class DispatcherManagerEmailPlaceRequestDto < BaseDispatcherManagerPlaceRequestDto
   attr_accessor :uid, :from, :to, :title, :body
   attr_reader :caseNumber
   

@@ -171,8 +171,8 @@ orders
 
 dispatcher-manager
 
-* email.place
-* email.placed
+* message.email.place
+* message.email.placed
 
 --------------------------------------------------------------------------------
 
