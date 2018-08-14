@@ -26,7 +26,7 @@ onPlaceMessage = dispatcherManagerTopic.createRoom(name: "message.place.request.
 onPlaceMessage.subscribe { |delivery_info, properties, payload|
   puts " [x] Received #{payload}"
 
-  message = JSON.parse payload
+  placeRequest = JSON.parse payload
 
   dispatcherManagerPlaceResponseDto = DispatcherManagerPlaceResponseDto.new(
     status: DispatcherManagerPlaceResponseDto.Placed

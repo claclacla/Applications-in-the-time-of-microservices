@@ -8,6 +8,7 @@ require_relative "../../../ruby/repositories/Mongo/OrderMongoRepository"
 require_relative "../../../ruby/dataProvider/OrderDataProvider"
 require_relative "../../../ruby/entities/EmailEntity"
 require_relative "../../../ruby/dtos/DispatcherManagerEmailPlaceRequestDto"
+require_relative "../../../ruby/dtos/DispatcherManagerPlaceResponseDto"
 
 require_relative '../../../ruby/lib/MessageBroker/MessageBroker'
 require_relative '../../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
@@ -48,10 +49,16 @@ dispatcherManagerTopic = messageBroker.createTopic(name: "dispatcher-manager", r
 onPlaceEmailResponse = dispatcherManagerTopic.createRoom(name: "message.place.response.email")
 
 onPlaceEmailResponse.subscribe(block: false) { |delivery_info, properties, payload|
-  orderDataProvider.setEmailStatus(
-    caseNumber: properties[:correlation_id], 
-    status: EmailEntity.RequestAccepted
-  )
+  placeResponse = JSON.parse payload
+
+  # TODO: Handle the Errored case
+
+  if placeResponse["status"] == DispatcherManagerPlaceResponseDto.Placed
+    orderDataProvider.setEmailStatus(
+      caseNumber: properties[:correlation_id], 
+      status: EmailEntity.RequestAccepted
+    )
+  end
 }
 
 onOrderPlaced.subscribe { |delivery_info, properties, payload|
