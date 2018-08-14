@@ -68,6 +68,24 @@ class OrderDataProvider < BaseDataProvider
   end
 
   def setEmailStatus caseNumber:, status:
+    resOrderEntities = @repository.get(match: { "messages.email.caseNumber": caseNumber })
 
+    # TODO: Return an error if the array length is not equal to 1
+
+    resOrderEntity = resOrderEntities[0]
+
+    resOrderEntity.messages["email"] = resOrderEntity.messages["email"].map do |email|
+      if email["caseNumber"] == caseNumber
+        email["status"] = status
+      end
+
+      email
+    end
+
+    patch(
+      uid: resOrderEntity.uid, 
+      operation: @repository.PatchReplace, 
+      patch: { messages: resOrderEntity.messages }
+    )
   end
 end
