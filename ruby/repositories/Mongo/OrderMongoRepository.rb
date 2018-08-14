@@ -31,7 +31,8 @@ class OrderMongoRepository
         :email => orderEntity.user.email,
         :mobile => orderEntity.user.mobile
       },
-      :status => orderEntity.status 
+      :status => orderEntity.status,
+      :messages => orderEntity.messages
     }
 
     result = @mongo[:order].insert_one(dbOrderEntity)
@@ -50,6 +51,7 @@ class OrderMongoRepository
       uid: resOrder["uid"],
       number: resOrder["number"],
       status: resOrder["status"],
+      messages: resOrder["messages"],
       user: orderUserEntity
     )
 
@@ -57,42 +59,7 @@ class OrderMongoRepository
   end
 
   def update query:, orderEntity:
-=begin
-    dbOrderEntity = { 
-      "uid" => orderEntity.uid,
-      "season" => orderEntity.season,
-      "code" => orderEntity.code,
-      "col_style_fabric_string" => orderEntity.col_style_fabric_string,
-      "user_zona" => orderEntity.user_zona,
-      "amount" => orderEntity.amount,
-      "warehouse" => orderEntity.warehouse,
-      "sockets" => orderEntity.sockets
-    }
 
-    if !orderEntity.code29.nil?  
-      dbOrderEntity["code29"] = orderEntity.code29
-    end
-
-    resOrder = @mongo[:order].find_one_and_replace(
-      query, dbOrderEntity)
-
-    resOrderEntity = OrderEntity.new(
-      uid: resOrder["uid"],
-      season: resOrder["season"],
-      code: resOrder["code"],
-      col_style_fabric_string: resOrder["col_style_fabric_string"],
-      user_zona: resOrder["user_zona"],
-      warehouse: resOrder["warehouse"],
-      amount: resOrder["amount"],
-      sockets: resOrder["sockets"]
-    )
-
-    if !resOrder["code29"].nil?
-      resOrderEntity.code29 = resOrder["code29"]
-    end
-
-    return resOrderEntity
-=end
   end
 
   def patch query:, operation:, patch:
@@ -120,6 +87,7 @@ class OrderMongoRepository
       uid: resOrder["uid"],
       number: resOrder["number"],
       status: resOrder["status"],
+      messages: resOrder["messages"],
       user: resOrderUserEntity
     )
 
@@ -142,6 +110,7 @@ class OrderMongoRepository
       uid: resOrder["uid"],
       number: resOrder["number"],
       status: resOrder["status"],
+      messages: resOrder["messages"],
       user: resOrderUserEntity
     )
 
@@ -180,7 +149,8 @@ class OrderMongoRepository
       "uid" => 1,
       "number" => 1,
       "user" => 1,
-      "status" => 1
+      "status" => 1,
+      "messages" => 1
     }})
 
     if !filters.nil?
@@ -202,6 +172,7 @@ class OrderMongoRepository
         uid: resOrder["uid"],
         number: resOrder["number"],
         status: resOrder["status"],
+        messages: resOrder["messages"],
         user: resOrderUserEntity
       )
   
@@ -212,9 +183,7 @@ class OrderMongoRepository
   end
 
   def remove filter:
-=begin
-    @mongo[:order].find(filter).delete_many
-=end
+
   end
 
   implements IRepository

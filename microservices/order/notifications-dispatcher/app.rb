@@ -6,6 +6,7 @@ require_relative "../../../ruby/lib/config"
 require_relative "../../../ruby/repositories/Mongo/lib/connect"
 require_relative "../../../ruby/repositories/Mongo/OrderMongoRepository"
 require_relative "../../../ruby/dataProvider/OrderDataProvider"
+require_relative "../../../ruby/entities/EmailEntity"
 require_relative "../../../ruby/dtos/DispatcherManagerEmailPlaceDto"
 
 require_relative '../../../ruby/lib/MessageBroker/MessageBroker'
@@ -47,7 +48,10 @@ dispatcherManagerTopic = messageBroker.createTopic(name: "dispatcher-manager", r
 onEmailPlaced = dispatcherManagerTopic.createRoom(name: "email.placed")
 
 onEmailPlaced.subscribe(block: false) { |delivery_info, properties, payload|
-  puts properties[:correlation_id]
+  orderDataProvider.setEmailStatus(
+    caseNumber: properties[:correlation_id], 
+    status: EmailEntity.RequestAccepted
+  )
 }
 
 onOrderPlaced.subscribe { |delivery_info, properties, payload|
@@ -73,7 +77,7 @@ onOrderPlaced.subscribe { |delivery_info, properties, payload|
 
   # attach email case number to the order
 
-  resOrderEntity = orderDataProvider.attachEmail(
+  orderDataProvider.attachEmail(
     uid: order["uid"], 
     caseNumber: dispatcherManagerEmailPlaceDto.caseNumber
   )

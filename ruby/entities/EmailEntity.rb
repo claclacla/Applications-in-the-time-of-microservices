@@ -6,13 +6,13 @@ class EmailEntity < BaseEntity
   @@RequestSent = "RequestSent"
   @@RequestAccepted = "RequestAccepted"
   
-  attr_accessor :uid, :number, :user, :status
+  attr_accessor :uid, :status, :caseNumber
   
-  def initialize uid: nil, status: @@RequestSent, receipt:
+  def initialize uid: nil, status: @@RequestSent, caseNumber:
     super(uid: uid)
 
     @status = status
-    @receipt = receipt
+    @caseNumber = caseNumber
   end
 
   def EmailEntity.RequestSent
@@ -26,7 +26,7 @@ class EmailEntity < BaseEntity
   def as_json(options={})
     {
       :status => @status,
-      :receipt => @receipt
+      :caseNumber => @caseNumber
     }
   end
 end

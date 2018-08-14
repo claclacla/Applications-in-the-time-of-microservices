@@ -66,4 +66,8 @@ class OrderDataProvider < BaseDataProvider
 
     @repository.patch(query: {"uid" => uid}, operation: @repository.PatchAdd, patch: patch)
   end
+
+  def setEmailStatus caseNumber:, status:
+
+  end
 end

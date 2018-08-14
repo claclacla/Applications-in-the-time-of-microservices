@@ -1,19 +1,18 @@
 require_relative './BaseEntity'
 require_relative "./OrderStatusEntity"
-require_relative "./OrderMessagesEntity"
 
 # TODO: Add parameters verification
 
 class OrderEntity < BaseEntity
-  attr_accessor :uid, :number, :user, :status
+  attr_accessor :uid, :number, :user, :status, :messages
   
-  def initialize uid: nil, number:, user:, status: OrderStatusEntity.New
+  def initialize uid: nil, number:, user:, status: OrderStatusEntity.New, messages: { "email" => [ ] }
     super(uid: uid)
 
     @number = number
     @user = user
     @status = status
-    @messages = OrderMessagesEntity.new
+    @messages = messages
   end
 
   def as_json(options={})
