@@ -22,8 +22,8 @@ class PatternMatchingRabbitMQTopic extends BaseRabbitMQTopic {
     return room;
   }
 
-  publish({ room, payload }) {
-    this.channel.publish(this.name, room, new Buffer(payload));
+  publish({ room, payload, options }) {
+    this.channel.publish(this.name, room, new Buffer(payload), options);
   }
 }
 
