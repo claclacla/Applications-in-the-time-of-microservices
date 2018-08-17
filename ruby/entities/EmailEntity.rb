@@ -5,6 +5,7 @@ require_relative './BaseEntity'
 class EmailEntity < BaseEntity
   @@RequestSent = "RequestSent"
   @@RequestAccepted = "RequestAccepted"
+  @@Sent = "Sent"
   
   attr_accessor :uid, :status, :caseNumber
   
@@ -21,6 +22,10 @@ class EmailEntity < BaseEntity
 
   def EmailEntity.RequestAccepted
     return @@RequestAccepted
+  end
+
+  def EmailEntity.Sent
+    return @@Sent
   end
 
   def as_json(options={})
