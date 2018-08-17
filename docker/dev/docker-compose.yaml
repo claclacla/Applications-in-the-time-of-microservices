@@ -155,6 +155,22 @@ services:
     tty: true
     stdin_open: true
 
+  email-dispatcher:
+    build: ./ruby-microservice-api
+    image: claclacla/ruby-microservice-api
+    container_name: EmailDispatcher
+    environment:
+      - MICROSERVICE_PATH=/usr/src/app/microservices/dispatcher/methods/email/app.rb
+      - APP_ENV=development
+    networks:
+      - rabbitmq_network
+    volumes:
+      - "${APP_FOLDER}:/usr/src/app"
+    links:
+      - rabbitmq
+    tty: true
+    stdin_open: true
+
   # Client
 
   client-application:

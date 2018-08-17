@@ -173,6 +173,9 @@ dispatcher-manager
 
 * message.place.request.email
 * message.place.response.email
+* message.send.request.email
+* message.send.response.email
+* message.sent.email
 
 --------------------------------------------------------------------------------
 
