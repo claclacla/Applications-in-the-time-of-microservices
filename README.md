@@ -2,14 +2,14 @@
 
 ## Break up your application into smaller dockerized microservices
 
-Microservices have redefined the way applications are built.
-Software architecture has changed and nowadays based on an environment of many different applications.
-
-Each service is extremely specialized and actually responsible for just one task.
+Microservices have redefined the way applications are built. Software development has changed and nowadays applications are based on an environment of many different processes. The `monolithic architecture`, based on a single unit assembled and released together, has evolved in a `multi process structure` built on top of a dedicated cloud architecture.
 
 This repository is a dockerized environment of microservices that handles the placement of an order.
 
-The interaction among services is provided by the MessageBroker library.
+Microservices interact together using messages and can be created using different programming languages depending on existing products, libraries or for other specific needs.
+Each service is extremely specialized and actually responsible for just one task.
+
+The interaction among services is provided by my MessageBroker library. It creates an abstraction layer over RabbitMQ in order to decouple this product from the application.
 
 ### MessageBroker library
 
