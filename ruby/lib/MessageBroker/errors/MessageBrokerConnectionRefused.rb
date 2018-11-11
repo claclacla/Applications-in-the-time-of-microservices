@@ -1,3 +1,0 @@
-class MessageBrokerConnectionRefused < RuntimeError
-
-end

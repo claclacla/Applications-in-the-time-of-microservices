@@ -8,22 +8,23 @@ require_relative "../../../ruby/dtos/DispatcherManagerEmailSendRequestDto"
 require_relative "../../../ruby/dtos/DispatcherManagerSendResponseDto"
 require_relative "../../../ruby/dtos/DispatcherManagerEmailSentDto"
 
-require_relative '../../../ruby/lib/MessageBroker/MessageBroker'
-require_relative '../../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
-require_relative '../../../ruby/lib/MessageBroker/Routing'
+require 'postcard_rb'
+require 'postcard_rb/errors/PostcardConnectionRefused'
+require 'postcard_rb/dispatchers/RabbitMQ/RabbitMQDispatcher'
+require 'postcard_rb/Routing'
 
 dispatcher = RabbitMQDispatcher.new(host: config["rabbitmq"]["host"])
-messageBroker = MessageBroker.new(dispatcher: dispatcher)
+postcardRB = PostcardRB.new(dispatcher: dispatcher)
 
 begin
-  messageBroker.connect
-rescue MessageBrokerConnectionRefused
+  postcardRB.connect
+rescue PostcardConnectionRefused
   abort "RabbitMQ connection refused"
 end
 
 printExecutionTime
 
-dispatcherManagerTopic = messageBroker.createTopic(name: "dispatcher-manager", routing: Routing.PatternMatching)
+dispatcherManagerTopic = postcardRB.createTopic(name: "dispatcher-manager", routing: Routing.PatternMatching)
 onSendResponse = dispatcherManagerTopic.createRoom(name: "message.send.response.*")
 
 onSendResponse.subscribe(block: false) { |delivery_info, properties, payload|

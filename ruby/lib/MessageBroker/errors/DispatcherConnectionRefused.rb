@@ -1,3 +1,0 @@
-class DispatcherConnectionRefused < RuntimeError
-
-end

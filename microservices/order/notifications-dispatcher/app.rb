@@ -10,19 +10,19 @@ require_relative "../../../ruby/entities/EmailEntity"
 require_relative "../../../ruby/dtos/DispatcherManagerEmailPlaceRequestDto"
 require_relative "../../../ruby/dtos/DispatcherManagerPlaceResponseDto"
 
-require_relative '../../../ruby/lib/MessageBroker/MessageBroker'
-require_relative '../../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
-require_relative '../../../ruby/lib/MessageBroker/Routing'
-require_relative "../../../ruby/lib/MessageBroker/lib/CorrelationID"
+require 'postcard_rb'
+require 'postcard_rb/errors/PostcardConnectionRefused'
+require 'postcard_rb/dispatchers/RabbitMQ/RabbitMQDispatcher'
+require 'postcard_rb/Routing'
 
 dispatcher = RabbitMQDispatcher.new(host: config["rabbitmq"]["host"])
-messageBroker = MessageBroker.new(dispatcher: dispatcher)
+postcardRB = PostcardRB.new(dispatcher: dispatcher)
 
 begin
-  messageBroker.connect
-rescue MessageBrokerConnectionRefused
+  postcardRB.connect
+rescue PostcardConnectionRefused
   abort "RabbitMQ connection refused"
-end 
+end
 
 mongo = mongoConnect(
   host: config["mongodb"]["host"], 
@@ -39,12 +39,12 @@ orderDataProvider = OrderDataProvider.new(repository: orderMongoRepository)
 
 # order
 
-orderTopic = messageBroker.createTopic(name: "order", routing: Routing.PatternMatching)
+orderTopic = postcardRB.createTopic(name: "order", routing: Routing.PatternMatching)
 onOrderPlaced = orderTopic.createRoom(name: "placed")
 
 # subscribe to the dispatcher-manager topic
 
-dispatcherManagerTopic = messageBroker.createTopic(name: "dispatcher-manager", routing: Routing.PatternMatching)
+dispatcherManagerTopic = postcardRB.createTopic(name: "dispatcher-manager", routing: Routing.PatternMatching)
 
 onPlaceEmailResponse = dispatcherManagerTopic.createRoom(name: "message.place.response.email")
 

@@ -8,18 +8,19 @@ require_relative "../../../ruby/entities/OrderUserEntity"
 require_relative "../../../ruby/repositories/Mongo/OrderMongoRepository"
 require_relative "../../../ruby/dataProvider/OrderDataProvider"
 
-require_relative '../../../ruby/lib/MessageBroker/MessageBroker'
-require_relative '../../../ruby/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher'
-require_relative '../../../ruby/lib/MessageBroker/Routing'
+require 'postcard_rb'
+require 'postcard_rb/errors/PostcardConnectionRefused'
+require 'postcard_rb/dispatchers/RabbitMQ/RabbitMQDispatcher'
+require 'postcard_rb/Routing'
 
 dispatcher = RabbitMQDispatcher.new(host: config["rabbitmq"]["host"])
-messageBroker = MessageBroker.new(dispatcher: dispatcher)
+postcardRB = PostcardRB.new(dispatcher: dispatcher)
 
 begin
-  messageBroker.connect
-rescue MessageBrokerConnectionRefused
+  postcardRB.connect
+rescue PostcardConnectionRefused
   abort "RabbitMQ connection refused"
-end  
+end 
 
 mongo = mongoConnect(
   host: config["mongodb"]["host"], 
@@ -31,7 +32,7 @@ mongo = mongoConnect(
 
 printExecutionTime
 
-topic = messageBroker.createTopic(name: "order", routing: Routing.PatternMatching)
+topic = postcardRB.createTopic(name: "order", routing: Routing.PatternMatching)
 onGetOrder = topic.createRoom(name: "get")
 
 orderMongoRepository = OrderMongoRepository.new(mongo: mongo)
