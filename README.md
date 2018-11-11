@@ -11,15 +11,7 @@ This repository is a dockerized environment of microservices that handles the pl
 Microservices have been created using `Javascript` and `Ruby` depending on existing products, libraries or for other specific needs and interact using messages.
 Each service is extremely specialized and actually responsible for just one task.
 
-The interaction among services is provided by my MessageBroker library. It creates an abstraction layer over RabbitMQ in order to decouple this product from the application.
-
-Microservices have redefined the way applications are built. Software development has changed and nowadays applications are based on an environment of many different processes. The monolithic architecture, based on a single unit assembled and released together, has evolved in a multi process structure built on top of a dedicated cloud architecture.
-
-This repository is a dockerized environment of microservices that handles the placement of an order.
-
-Microservices interact together using messages and can be created using different programming languages depending on existing products, libraries or for other specific needs. Each service is extremely specialized and actually responsible for just one task.
-
-The interaction among services is provided by my MessageBroker library. It creates an abstraction layer over RabbitMQ in order to decouple this product from the application.
+The interaction among services is provided by my `Postcard` library. It creates an abstraction layer over RabbitMQ in order to decouple this product from the application.
 
 ### Application diagram
 
