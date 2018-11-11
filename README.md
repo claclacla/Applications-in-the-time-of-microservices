@@ -7,7 +7,6 @@ Microservices have redefined the way applications are built. Software developmen
 The infrastructure became an important aspect of the software creation process and the cloud computing platforms services are part of the product development.
 
 This repository is a dockerized environment of microservices that handles the placement of an order.
-Procedures are indipendents  
 
 Microservices have been created using `Javascript` and `Ruby` depending on existing products, libraries or for other specific needs and interact using messages.
 Each service is extremely specialized and actually responsible for just one task.
