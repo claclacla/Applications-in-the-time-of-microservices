@@ -14,7 +14,8 @@
     "body-parser": "~1.17.1",
     "cookie-parser": "^1.4.3",
     "express": "~4.15.2",
-    "shortid": "^2.2.8"
+    "shortid": "^2.2.8",
+    "postcard-js": "0.0.2"
   },
   "devDependencies": {}
 }

@@ -4,21 +4,21 @@ const router = express.Router();
 
 //const HttpError = require("../../errors/HttpError");
 
-const RabbitMQDispatcher = require("../../../../js/lib/MessageBroker/dispatchers/RabbitMQ/RabbitMQDispatcher");
-const MessageBroker = require("../../../../js/lib/MessageBroker/MessageBroker");
-const Routing = require("../../../../js/lib/MessageBroker/Routing");
+const RabbitMQDispatcher = require('postcard-js/dispatchers/RabbitMQ/RabbitMQDispatcher');
+const Postcard = require('postcard-js/Postcard');
+const Routing = require('postcard-js/Routing');
 
 (async () => {
   const rabbitMQDispatcher = new RabbitMQDispatcher({ host: 'amqp://rabbitmq' });
-  const messageBroker = new MessageBroker(rabbitMQDispatcher);
+  const postcard = new Postcard(rabbitMQDispatcher);
 
   try {
-    await messageBroker.connect();
+    await postcard.connect();
   } catch (error) {
     return;
   }
 
-  let orderTopic = messageBroker.createTopic({ name: "order", routing: Routing.PatternMatching });
+  let orderTopic = postcard.createTopic({ name: "order", routing: Routing.PatternMatching });
 
   // order.place, order.placed
 

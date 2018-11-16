@@ -19,7 +19,7 @@ The interaction among services is provided by my `Postcard` library. It creates 
 
 ### Postcard: An abstraction layer over message brokers
 
-This library, created for both languages `Javascript` and `Ruby`(https://rubygems.org/gems/postcard_rb), is an abstraction layer over `RabbitMQ`. 
+This library, created for both languages `Javascript`(https://www.npmjs.com/package/postcard-js) and `Ruby`(https://rubygems.org/gems/postcard_rb), is an abstraction layer over `RabbitMQ`. 
 It allows the communication among the microservices, providing functionality for publishing and subscribing events.
 
 The microservices interact through topics created with one of three routing types: `Wide`, `Explicit` and `PatternMatching`. 
@@ -200,4 +200,5 @@ This project is licensed under the MIT License
 ## Acknowledgments
 
 - [Ruby MongoDB driver](https://docs.mongodb.com/ruby-driver/master/ruby-driver-tutorials/)
+- [Postcard: Js version](https://www.npmjs.com/package/postcard-js)
 - [Postcard: Ruby version](https://rubygems.org/gems/postcard_rb)
